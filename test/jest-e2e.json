@@ -1,0 +1,21 @@
+{
+    "preset": "ts-jest",
+    "transform": {
+        "^.+\\.(t)s$": [
+        "ts-jest",
+        {
+            "tsconfig": "tsconfig.json"
+        }
+        ]
+    },
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "roots": ["<rootDir>/test/e2e"],
+    "rootDir": "../.",
+    "testEnvironment": "node",
+    "testRegex": ".e2e-spec.ts$",
+    "moduleNameMapper": {
+        "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+        "^@common/(.*)$": "<rootDir>/src/common/$1",
+        "^@test/(.*)$": "<rootDir>/test/$1"
+    }
+}

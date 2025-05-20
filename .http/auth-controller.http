@@ -1,0 +1,30 @@
+@baseUrl = https://localhost:3443/api/v1
+
+### Solicitud para registrar usuario
+POST {{baseUrl}}/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user99@example.com",
+    "passwordHash": "patata8889",
+    "applicationId": 1
+}
+
+### Solicitud para autentificar usuario
+POST {{baseUrl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "user99@example.com",
+    "passwordHash": "patata8889",
+    "applicationId": 1
+}
+
+### Solicitud para autentificar usuario
+POST {{baseUrl}}/auth/logout HTTP/1.1
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXI5OUBleGFtcGxlLmNvbSIsInVzZXJJZCI6MTcsImlhdCI6MTc0NzE3ODgwMSwiZXhwIjoxNzQ3MTgyNDAxfQ.Z-0YI7cvXALIrnC-q3_1BKs_4B1Ysq69weibtTVA7JA",
+    "userId": 17
+}

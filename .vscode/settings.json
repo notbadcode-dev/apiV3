@@ -1,0 +1,24 @@
+{
+    "editor.formatOnSave": true,                 // Formatear automáticamente al guardar
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",  // Usar ESLint para el formateo            // Mostrar siempre el estado de ESLint
+    "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"], // Validar estos tipos de archivo                // Ejecutar ESLint solo al guardar
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "localhost",
+            "database": "NBCCoreAPI",
+            "username": "bgr",
+            "password": "6900"
+        }
+    ]
+}

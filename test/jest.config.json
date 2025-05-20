@@ -1,0 +1,43 @@
+{
+  "preset": "ts-jest",
+  "transform": {
+    "^.+\\.(t)s$": [
+      "ts-jest",
+      {
+        "tsconfig": "tsconfig.json"
+      }
+    ]
+  },
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "roots": ["<rootDir>/test"],
+  "rootDir": "../.",
+  "testEnvironment": "node",
+  "testRegex": ".*\\.spec\\.ts$|.*\\.e2e-spec\\.ts$",
+  "moduleNameMapper": {
+    "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+    "^@common/(.*)$": "<rootDir>/src/common/$1",
+    "^@test/(.*)$": "<rootDir>/test/$1"
+  },
+  "collectCoverage": true,
+  "collectCoverageFrom": [
+    "src/**/*.{ts,js}",
+    "!src/**/constants/*",
+    "!src/**/enums/*",
+    "!src/**/dtos/*",
+    "!src/**/interfaces/*",
+    "!src/**/utils/*",
+    "!src/**/entities/*"
+  ],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/src/common/constants/",
+    "/src/common/enums/",
+    "/src/common/dtos/",
+    "/src/common/interfaces/",
+    "/src/common/utils/"
+  ],
+  "coverageDirectory": "<rootDir>/test/coverage",
+  "verbose": true,
+  "setupFilesAfterEnv": ["<rootDir>/test/jest.setup.ts"]
+
+}
