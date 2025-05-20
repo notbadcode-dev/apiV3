@@ -1,0 +1,27 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+/logs
+
+# OS
+.DS_Store
+
+# Tests
+/test/coverage
+/.nyc_output
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# dotenv environment variable files
+/environment
+
+# certificates
+/cert

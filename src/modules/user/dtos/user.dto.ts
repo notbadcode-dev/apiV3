@@ -1,0 +1,18 @@
+import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
+import { Expose } from 'class-transformer';
+import { IsEmail, IsInt, IsString, Length } from 'class-validator';
+
+export class UserDto {
+  @Expose()
+  @IsInt()
+  public id!: number;
+
+  @Expose()
+  @IsEmail()
+  public email!: string;
+
+  @Expose()
+  @IsString()
+  @Length(USER_CONSTANTS.validators.minLengthPasswordHash, USER_CONSTANTS.validators.minLengthPasswordHash)
+  public passwordHash!: string;
+}

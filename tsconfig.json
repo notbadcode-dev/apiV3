@@ -1,0 +1,76 @@
+{
+  "compilerOptions": {
+    // ----------------------------------------
+    // Módulos y Resolución de Archivos
+    // ----------------------------------------
+    "module":                        "commonjs",       // Especifica el sistema de módulos
+    "moduleResolution":              "node",           // Usa la resolución de módulos estilo Node.js
+    "baseUrl":                       "./",             // Base para rutas relativas
+    "paths": {
+      "@modules/*":                  ["./src/modules/*"],       // Alias para módulos
+      "@common/*":                   ["./src/common/*"],        // Alias para comunes
+      "@cert/*":                     ["./cert/*"],              // Alias para certificados
+      "@test/*":                     ["test/*"],                // Alias para pruebas
+      "@environment/*":              ["./environment/*"]        // Alias para entorno
+    },
+
+    // ----------------------------------------
+    // Generación de Archivos y Metadatos
+    // ----------------------------------------
+    "declaration":                   true,             // Genera archivos `.d.ts`
+    "emitDecoratorMetadata":         true,             // Habilita metadatos de decoradores
+    "experimentalDecorators":        true,             // Soporte para decoradores
+    "sourceMap":                     true,             // Genera `.map` para debug
+    "outDir":                        "./dist",         // Directorio de salida compilada
+
+    // ----------------------------------------
+    // Estrictas y Comprobaciones
+    // ----------------------------------------
+    "strict":                        true,             // Activa todas las opciones estrictas
+    "strictNullChecks":              true,             // Chequeo estricto de `null` y `undefined`
+    "noImplicitAny":                 true,             // Evita el uso de `any` implícito
+    "strictPropertyInitialization":  true,             // Propiedades deben inicializarse
+    "noFallthroughCasesInSwitch":    true,             // Evita `fallthrough` en switch
+    "forceConsistentCasingInFileNames": true,         // Consistencia en nombres de archivos
+
+    // ----------------------------------------
+    // Compatibilidad y Soporte de Librerías
+    // ----------------------------------------
+    "esModuleInterop":               true,             // Interoperabilidad con ESModules
+    "resolveJsonModule":             true,             // Permite importar `.json`
+    "lib":                           ["ES6", "ES2020"],// Bibliotecas disponibles
+
+    // ----------------------------------------
+    // Optimización y Compilación
+    // ----------------------------------------
+    "incremental":                   true,             // Compilación incremental
+    "skipLibCheck":                  true,             // Omite chequeo en `.d.ts` de libs
+    "skipDefaultLibCheck":           true,             // Omite chequeo de lib por defecto
+    "noEmitOnError":                 true,             // No emite si hay errores
+
+    // ----------------------------------------
+    // Manejando Variables de Excepción
+    // ----------------------------------------
+    "useUnknownInCatchVariables":    true,             // Usa `unknown` en catch
+
+    // ----------------------------------------
+    // Otros Ajustes Generales
+    // ----------------------------------------
+    "removeComments":                true,             // Elimina comentarios en el resultado
+    "allowSyntheticDefaultImports":  true,             // Permite importar por defecto
+    "target":                        "ES6",            // Compila a ES6
+    "strictBindCallApply":           false             // Desactiva chequeo estricto en `bind`, `call`, `apply`
+  },
+
+  // ----------------------------------------
+  // Archivos a Incluir y Excluir
+  // ----------------------------------------
+  "include": [
+    "src/**/*.ts",                                // Código fuente principal
+    "test/**/*.ts"                                // Código de pruebas
+  ],
+  "exclude": [
+    "node_modules",                               // Librerías externas
+    "dist"                                        // Carpeta de compilación
+  ]
+}

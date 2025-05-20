@@ -1,0 +1,20 @@
+import { GlobalResponseService } from '@common/utils/global-response.service';
+import { GetUserRequestDto, GetUserResponseDto } from '@modules/user/dtos/getUser.dto';
+import { UserService } from '@modules/user/services/user.service';
+import { Body, Controller, Post } from '@nestjs/common';
+
+import { USER_CONSTANTS } from './constants/user.constants';
+import { UserDto } from './dtos/user.dto';
+
+@Controller('user')
+export class UsersController {
+  constructor(private readonly _usersService: UserService) {}
+
+  @Post('getById')
+  public async getById(@Body() request: GetUserRequestDto): Promise<GetUserResponseDto> {
+    const DATA: UserDto = await this._usersService.getById(request);
+    const RESPONSE: GetUserResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(DATA, USER_CONSTANTS.messages.getUserWithUserIdIsSuccessfully(DATA.id));
+
+    return RESPONSE;
+  }
+}

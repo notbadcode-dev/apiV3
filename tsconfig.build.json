@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // ----------------------------------------
+    // Configuración específica de compilación
+    // ----------------------------------------
+    "noEmitOnError":            true,  // No emite archivos si hay errores
+    "removeComments":           true,  // Elimina los comentarios en el código compilado
+    "sourceMap":                false, // No genera archivos `.map`
+    "declaration":              true,  // Genera archivos de declaración `.d.ts`
+    "outDir":                   "./dist" // Directorio de salida para el build
+  },
+
+  // ----------------------------------------
+  // Archivos a Excluir del Build
+  // ----------------------------------------
+  "exclude": [
+    "node_modules",                    // Excluye dependencias
+    "test",                            // Excluye archivos de prueba
+    "dist",                            // Evita recompilar la salida previa
+    "**/*.spec.ts",                    // Excluye pruebas unitarias
+    "**/*.test.ts"                     // Excluye pruebas e2e o específicas
+  ]
+}
