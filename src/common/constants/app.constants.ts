@@ -85,6 +85,11 @@ export const APP_CONSTANTS = {
 
       return '🛢️  Database connection details:\n' + `   Host : ${HOST}\n` + `   Port : ${PORT}\n` + `   Name : ${NAME}\n`;
     },
+
+    jwtSecretIsNotDefined: 'JWT_SECRET is not defined in environment variables.',
+    jwtFromRequestFunctionCouldNotGet: 'JWT_FROM_REQUEST_FUNCTION could not get.',
+
+    accessNotAuthorized: 'Access not authorized.',
   },
 
   configuration: {
@@ -93,8 +98,7 @@ export const APP_CONSTANTS = {
     defaultAppListenHttpsPort: 3443,
     forAllRoutesSymbol: '*',
     token: {
-      secret: 'XTd{?Ys{:3&LyAea3X}%5rXM',
-      expirationIn: '1h',
+      strategy: 'jwt',
     },
   },
 

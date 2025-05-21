@@ -1,5 +1,6 @@
 import { ILogMethod } from '@common/dtos/log-method.dto';
 import { LogPropertyDescriptorDto } from '@common/dtos/log-property-descriptor.dto';
+import { LOGGING_CONSTANTS } from '@common/modules/logging/constants/logging.constants';
 import { LoggingService } from '@common/modules/logging/services/logging.service';
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -23,7 +24,7 @@ export function LogMethod(target: object, key: string, descriptor: PropertyDescr
 
   descriptor.value = async function (...args: unknown[]): Promise<unknown> {
     const START_TIME: number = Date.now();
-    LOG_METHOD.argumentList = args;
+    LOG_METHOD.argumentList = safeStringify(args);
     LOG_METHOD.startTime = START_TIME;
 
     LoggingService.logStart(LOG_METHOD);
@@ -46,4 +47,19 @@ export function LogMethod(target: object, key: string, descriptor: PropertyDescr
       }
     }
   };
+}
+
+function safeStringify(obj: unknown): string {
+  const CACHE = new Set();
+  return JSON.stringify(
+    obj,
+    (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (CACHE.has(value)) return '[Circular]';
+        CACHE.add(value);
+      }
+      return value;
+    },
+    LOGGING_CONSTANTS.indentObjectOnArgumentList,
+  );
 }

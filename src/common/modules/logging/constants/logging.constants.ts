@@ -61,4 +61,6 @@ export const LOGGING_CONSTANTS = {
   getLogMaxFiles: 5,
 
   loggerLevel: 'info' as const,
+
+  indentObjectOnArgumentList: 2,
 };

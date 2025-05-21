@@ -1,7 +1,7 @@
 export interface ILogMethod {
   className: string;
   methodName: string;
-  argumentList: unknown[];
+  argumentList: unknown[] | string;
   startTime: number;
   result?: unknown;
   error?: Error;
