@@ -1,5 +1,5 @@
-import { AccessTokenPayloadDto } from '@common/modules/database/dtos/access-token-payload.dto';
 import { RedisService } from '@common/modules/redis/services/redis.service';
+import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { JwtService } from '@nestjs/jwt';
 
 export class TokenServiceTestData {
@@ -7,6 +7,7 @@ export class TokenServiceTestData {
     return {
       email: 'user@example.com',
       userId: 1,
+      tryGetIfExists: true,
     };
   }
 
@@ -24,8 +25,16 @@ export class TokenServiceTestData {
     };
   }
 
+  public static getAccessTokenPayloadWithInvalidUserIdWithNotTryGetIfExists(): AccessTokenPayloadDto {
+    return {
+      email: 'user@example.com',
+      userId: 1,
+      tryGetIfExists: false,
+    };
+  }
+
   public static getJwTokenSignMethodName(): keyof JwtService {
-    return 'sign';
+    return 'signAsync';
   }
 
   public static getRedisGetAccessTokenMethodName(): keyof RedisService {

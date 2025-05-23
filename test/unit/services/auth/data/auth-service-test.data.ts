@@ -1,5 +1,6 @@
 import { UserLoginRequestDto } from '@modules/auth/dtos/userLogin.dto';
 import { UserLogoutRequestDto } from '@modules/auth/dtos/userLogout.dto';
+import { UserRefreshRequestDto } from '@modules/auth/dtos/userRefresh.dto';
 import { UserRegisterRequestDto } from '@modules/auth/dtos/userRegister.dto';
 import { EAuthenticationType } from '@modules/auth/enums/authentication-type.enum';
 import { UserDto } from '@modules/user/dtos/user.dto';
@@ -83,21 +84,25 @@ export class AuthServiceTestData {
 
   public static getValidLogoutRequest(): UserLogoutRequestDto {
     return {
-      token: 'valid-token',
       userId: 1,
-    };
-  }
-
-  public static getLogoutRequestWithEmptyToken(): UserLogoutRequestDto {
-    return {
-      ...this.getValidLogoutRequest(),
-      token: '',
     };
   }
 
   public static getLogoutRequestWithInvalidUserId(): UserLogoutRequestDto {
     return {
       ...this.getValidLogoutRequest(),
+      userId: 0,
+    };
+  }
+
+  public static getValidRefreshRequest(): UserRefreshRequestDto {
+    return {
+      userId: 1,
+    };
+  }
+
+  public static getRefreshRequestWithInvalidUserId(): UserRefreshRequestDto {
+    return {
       userId: 0,
     };
   }

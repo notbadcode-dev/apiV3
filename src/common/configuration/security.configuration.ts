@@ -26,7 +26,7 @@ export class SecurityConfigurator {
     this.configureStaticFiles();
     this.configureCorsPolicy();
     this.configureValidationPipe();
-    this.configureGlobalTimeouts();
+    // this.configureGlobalTimeouts();
     this.configureApiVersioning();
     this.configureDefaultHeaders();
     this.configureMethodRestrictions();

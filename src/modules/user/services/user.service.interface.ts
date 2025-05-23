@@ -3,7 +3,7 @@ import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
 import { UserDto } from '../dtos/user.dto';
 
 export interface IUserService {
-  getById(request: GetUserRequestDto): Promise<UserDto>;
+  getById(request: GetUserRequestDto): Promise<UserDto | null>;
 
   getUserByEmail(email: string): Promise<UserDto | null>;
 

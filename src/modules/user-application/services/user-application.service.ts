@@ -1,3 +1,4 @@
+import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { UserApplication } from '@modules/user-application/entities/user-application.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,6 +19,7 @@ export class UserApplicationService implements IUserApplicationService {
 
   //#endregion public methods
 
+  @LogMethod
   public async validateAccessUserOnApplication(validateUserAccessOnApplication: ValidateUserAccessOnApplicationDto): Promise<void> {
     const { userId: USER_ID, applicationId: APPLICATION_ID, email: EMAIL } = validateUserAccessOnApplication;
 
@@ -30,6 +32,7 @@ export class UserApplicationService implements IUserApplicationService {
     }
   }
 
+  @LogMethod
   public async addLastAccessAt(userApplication: UserApplicationDto): Promise<void> {
     const { userId: USER_ID, applicationId: APPLICATION_ID } = userApplication;
 

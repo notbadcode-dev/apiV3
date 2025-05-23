@@ -4,6 +4,7 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserAuthenticatorDto } from './dtos/userAuthenticator.dto';
 import { UserLoginResponseDto } from './dtos/userLogin.dto';
 import { UserLogoutRequestDto, UserLogoutResponseDto } from './dtos/userLogout.dto';
+import { UserRefreshRequestDto, UserRefreshResponseDto } from './dtos/userRefresh.dto';
 import { UserRegisterResponseDto } from './dtos/userRegister.dto';
 import { AuthService } from './services/auth.service';
 
@@ -25,5 +26,11 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   public async logout(@Body() request: UserLogoutRequestDto): Promise<UserLogoutResponseDto> {
     return await this._authService.logout(request);
+  }
+
+  @Post('refresh')
+  @UseGuards(JwtAuthGuard)
+  public async refresh(@Body() request: UserRefreshRequestDto): Promise<UserRefreshResponseDto> {
+    return await this._authService.refreshToken(request);
   }
 }

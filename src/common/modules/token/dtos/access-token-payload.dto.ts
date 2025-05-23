@@ -1,4 +1,4 @@
-import { IsEmail, IsInt } from 'class-validator';
+import { IsBoolean, IsEmail, IsInt } from 'class-validator';
 
 export class AccessTokenPayloadDto {
   @IsEmail()
@@ -6,4 +6,7 @@ export class AccessTokenPayloadDto {
 
   @IsInt()
   public userId!: number;
+
+  @IsBoolean()
+  public tryGetIfExists?: boolean;
 }

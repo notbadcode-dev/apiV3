@@ -38,13 +38,11 @@ export function LogMethod(target: object, key: string, descriptor: PropertyDescr
 
       return RESULT;
     } catch (error) {
-      if (error instanceof Error) {
-        LOG_METHOD.error = error;
-        LOG_METHOD.duration = Date.now() - START_TIME;
+      LOG_METHOD.error = error instanceof Error ? error : new Error(JSON.stringify(error));
+      LOG_METHOD.duration = Date.now() - START_TIME;
 
-        LoggingService.logError(LOG_METHOD);
-        throw error;
-      }
+      LoggingService.logError(LOG_METHOD);
+      throw error;
     }
   };
 }

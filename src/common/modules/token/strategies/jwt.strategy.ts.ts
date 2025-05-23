@@ -1,5 +1,5 @@
 import { APP_CONSTANTS } from '@common/constants/app.constants';
-import { AccessTokenPayloadDto } from '@common/modules/database/dtos/access-token-payload.dto';
+import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';

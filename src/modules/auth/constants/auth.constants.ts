@@ -14,6 +14,10 @@ export const AUTH_CONSTANTS = {
       return 'Logout already completed: the token was already invalidated or expired.';
     },
 
+    tokenRefreshed: (): string => {
+      return `Token refreshed: Your access token has been successfully refreshed.`;
+    },
+
     registrationSuccessfully: (): string => {
       return `Registration successful: You have been successfully registered. Welcome aboard!`;
     },

@@ -1,12 +1,13 @@
 import { LogMethod } from '@common/decorators/logged-method.decorator';
-import { AccessTokenPayloadDto } from '@common/modules/database/dtos/access-token-payload.dto';
 import { RedisService } from '@common/modules/redis/services/redis.service';
+import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 
 import { ITokenService } from './token.service.interface';
+import { TOKEN_CONSTANTS } from '../constants/token.constants';
 
 @Injectable()
 export class TokenService implements ITokenService {
@@ -25,22 +26,49 @@ export class TokenService implements ITokenService {
   public async getAccessToken(accessTokenPayload: AccessTokenPayloadDto): Promise<string> {
     this.validateArgumentsForGetAccessToken(accessTokenPayload);
 
-    const EXISTING_TOKEN = await this.getExistingToken(accessTokenPayload.userId);
+    if (!accessTokenPayload.tryGetIfExists) {
+      const ACCESS_TOKEN: string = await this._jwtService.signAsync(accessTokenPayload);
 
-    if (!!EXISTING_TOKEN) {
-      return EXISTING_TOKEN;
+      await this._redisService.setAccessToken(accessTokenPayload.userId, ACCESS_TOKEN);
+
+      return ACCESS_TOKEN;
     }
 
-    const ACCESS_TOKEN: string = await this._jwtService.signAsync(accessTokenPayload);
+    const EXISTING_TOKEN = await this.getExistingToken(accessTokenPayload.userId);
 
-    await this._redisService.setAccessToken(accessTokenPayload.userId, ACCESS_TOKEN);
+    if (!EXISTING_TOKEN?.length) {
+      return '';
+    }
 
-    return ACCESS_TOKEN;
+    return EXISTING_TOKEN;
   }
 
   @LogMethod
   public async revokeToken(userId: number): Promise<boolean> {
     return await this._redisService.expireAccessToken(userId);
+  }
+
+  @LogMethod
+  public async refreshToken(userId: number): Promise<string> {
+    const EXISTING_TOKEN = await this.getExistingToken(userId);
+    if (!EXISTING_TOKEN) {
+      throw new NotFoundException(TOKEN_CONSTANTS.messages.previousTokenNotFound);
+    }
+
+    await this.verifyToken(userId, EXISTING_TOKEN);
+    await this.revokeToken(userId);
+
+    const VERIFY_TOKEN = await this._jwtService.verifyAsync<AccessTokenPayloadDto>(EXISTING_TOKEN);
+    const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = {
+      userId: VERIFY_TOKEN.userId,
+      email: VERIFY_TOKEN.email,
+      tryGetIfExists: false,
+    };
+
+    await this._jwtService.verifyAsync<AccessTokenPayloadDto>(EXISTING_TOKEN);
+    const NEW_TOKEN: string = await this.getAccessToken(ACCESS_TOKEN_PAYLOAD);
+
+    return NEW_TOKEN;
   }
 
   //#endregion
@@ -67,17 +95,21 @@ export class TokenService implements ITokenService {
       return null;
     }
 
+    return await this.verifyToken(userId, EXISTING_TOKEN);
+  }
+
+  @LogMethod
+  private async verifyToken(userId: number, token: string): Promise<string | null> {
     try {
-      await this._jwtService.verifyAsync<AccessTokenPayloadDto>(EXISTING_TOKEN);
-      return EXISTING_TOKEN;
+      await this._jwtService.verifyAsync<AccessTokenPayloadDto>(token);
+      return token;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.name === 'TokenExpiredError') {
-        await this._redisService.expireAccessToken(userId);
+      if (error.name === TOKEN_CONSTANTS.tokenExpiredErrorTag) {
+        await this.revokeToken(userId);
         return null;
       }
 
-      // Otros errores → lanza hacia arriba
       throw error;
     }
   }

@@ -1,3 +1,4 @@
+import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { ArgumentException } from '@common/exceptions/argument.exception';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,6 +20,7 @@ export class ApplicationService implements IApplicationService {
 
   //#region public methods
 
+  @LogMethod
   public async getApplicationById(applicationId: number): Promise<ApplicationDto> {
     if (!applicationId || applicationId < 0) {
       throw new ArgumentException(APPLICATION_CONSTANTS.messages.notFoundApplicationWithApplicationId(applicationId));
@@ -36,6 +38,7 @@ export class ApplicationService implements IApplicationService {
     return APPLICATION_DTO;
   }
 
+  @LogMethod
   public async validateIsApplicationNotFoundById(applicationId: number): Promise<void> {
     if (!applicationId || applicationId < 0) {
       throw new ArgumentException(APPLICATION_CONSTANTS.messages.notFoundApplicationWithApplicationId(applicationId));

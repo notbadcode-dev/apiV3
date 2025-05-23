@@ -1,3 +1,4 @@
+import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { ArgumentException } from '@common/exceptions/argument.exception';
 import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
 import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
@@ -19,7 +20,8 @@ export class UserService implements IUserService {
 
   //#region Public methods
 
-  public async getById(request: GetUserRequestDto): Promise<UserDto> {
+  @LogMethod
+  public async getById(request: GetUserRequestDto): Promise<UserDto | null> {
     const USER_ID: number = request?.id;
     if (!Number.isInteger(USER_ID) || USER_ID <= 0) {
       throw new ArgumentException(USER_CONSTANTS.messages.invalidUserId(USER_ID));
@@ -33,6 +35,7 @@ export class UserService implements IUserService {
     return plainToClass(UserDto, USER_ENTITY, { excludeExtraneousValues: true });
   }
 
+  @LogMethod
   public async getUserByEmail(email: string): Promise<UserDto | null> {
     if (!email.trim()?.length) {
       throw new BadRequestException(USER_CONSTANTS.messages.emailIsRequired());
@@ -46,6 +49,7 @@ export class UserService implements IUserService {
     return plainToClass(UserDto, USER_ENTITY, { excludeExtraneousValues: true });
   }
 
+  @LogMethod
   public async validateIsAlreadyUserByEmail(email: string): Promise<void> {
     if (!email.trim()?.length) {
       throw new BadRequestException(USER_CONSTANTS.messages.emailIsRequired());

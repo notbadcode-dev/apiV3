@@ -12,8 +12,8 @@ export class UsersController {
 
   @Post('getById')
   public async getById(@Body() request: GetUserRequestDto): Promise<GetUserResponseDto> {
-    const DATA: UserDto = await this._usersService.getById(request);
-    const RESPONSE: GetUserResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(DATA, USER_CONSTANTS.messages.getUserWithUserIdIsSuccessfully(DATA.id));
+    const DATA: UserDto | null = await this._usersService.getById(request);
+    const RESPONSE: GetUserResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(DATA, USER_CONSTANTS.messages.getUserWithUserIdIsSuccessfully(DATA?.id ?? 0));
 
     return RESPONSE;
   }

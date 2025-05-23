@@ -6,8 +6,8 @@ import { UserApplication } from '@modules/user-application/entities/user-applica
 import { plainToClass } from 'class-transformer';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
-import { ApplicationServiceTestData } from '../../application-service/data/application-service-test.data';
-import { UserServiceTestData } from '../../user-service/data/user-service-test.data';
+import { ApplicationServiceTestData } from '../../application/data/application-service-test.data';
+import { UserServiceTestData } from '../../user/data/user-service-test.data';
 
 export class UserApplicationServiceTestData {
   public static getValidUserApplicationEntity(): UserApplication {

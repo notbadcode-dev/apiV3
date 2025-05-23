@@ -40,12 +40,6 @@ beforeEach(() => {
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockClear();
 });
 
-it('should throw BadRequestException if token is missing', async () => {
-  const REQUEST: UserLogoutRequestDto = AuthServiceTestData.getLogoutRequestWithEmptyToken();
-
-  await expect(authService.logout(REQUEST)).rejects.toThrow(new BadRequestException(USER_CONSTANTS.messages.tokenIsRequired()));
-});
-
 it('should throw BadRequestException if userId is invalid', async () => {
   const REQUEST: UserLogoutRequestDto = AuthServiceTestData.getLogoutRequestWithInvalidUserId();
 

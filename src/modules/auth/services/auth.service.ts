@@ -1,5 +1,6 @@
-import { AccessTokenPayloadDto } from '@common/modules/database/dtos/access-token-payload.dto';
+import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
+import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
 import { ApplicationService } from '@modules/application/services/application.service';
@@ -19,6 +20,7 @@ import { AUTH_CONSTANTS } from '../constants/auth.constants';
 import { UserAuthenticatorDto } from '../dtos/userAuthenticator.dto';
 import { UserLoginRequestDto, UserLoginResponseDto } from '../dtos/userLogin.dto';
 import { UserLogoutRequestDto, UserLogoutResponseDto } from '../dtos/userLogout.dto';
+import { UserRefreshRequestDto, UserRefreshResponseDto } from '../dtos/userRefresh.dto';
 import { UserRegisterRequestDto, UserRegisterResponseDto } from '../dtos/userRegister.dto';
 import { EAuthenticationType } from '../enums/authentication-type.enum';
 
@@ -38,6 +40,7 @@ export class AuthService implements IAuthService {
 
   //#region Public methods
 
+  @LogMethod
   public async register(request: UserRegisterRequestDto): Promise<UserRegisterResponseDto> {
     await this.validateArgumentsForLogin(request);
 
@@ -55,6 +58,7 @@ export class AuthService implements IAuthService {
     return RESPONSE;
   }
 
+  @LogMethod
   public async login(request: UserLoginRequestDto): Promise<UserLoginResponseDto> {
     await this.validateArgumentsForLogin(request);
 
@@ -71,12 +75,13 @@ export class AuthService implements IAuthService {
       throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials());
     }
 
-    const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0 };
+    const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0, tryGetIfExists: true };
     const ACCESS_TOKEN = await this._tokenService.getAccessToken(ACCESS_TOKEN_PAYLOAD);
 
     return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, AUTH_CONSTANTS.messages.loginSuccessfully());
   }
 
+  @LogMethod
   public async logout(request: UserLogoutRequestDto): Promise<UserLogoutResponseDto> {
     await this.validateArgumentsForLogout(request);
 
@@ -92,10 +97,30 @@ export class AuthService implements IAuthService {
     return GlobalResponseService.getSuccessfullyGlobalResponse(IS_SUCCESSFULLY_REVOKED, AUTH_CONSTANTS.messages.logoutSuccessfully());
   }
 
+  @LogMethod
+  public async refreshToken(request: UserRefreshRequestDto): Promise<UserRefreshResponseDto> {
+    await this.validateArgumentsForLogout(request);
+
+    const REQUEST: GetUserRequestDto = { id: request.userId };
+    const USER: UserDto | null = await this._userService.getById(REQUEST);
+
+    if (!USER || USER.id !== request.userId) {
+      throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials());
+    }
+
+    const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0, tryGetIfExists: false };
+    const NEW_TOKEN = await this._tokenService.getAccessToken(ACCESS_TOKEN_PAYLOAD);
+
+    await this._tokenService.refreshToken(request.userId);
+
+    return GlobalResponseService.getSuccessfullyGlobalResponse(NEW_TOKEN, AUTH_CONSTANTS.messages.tokenRefreshed());
+  }
+
   //#endregion
 
   //#region Private methods
 
+  @LogMethod
   private async saveNewUser(request: UserRegisterRequestDto): Promise<User> {
     const NEW_USER_ENTITY: User = new User();
 
@@ -108,10 +133,12 @@ export class AuthService implements IAuthService {
     return NEW_USER_ENTITY;
   }
 
+  @LogMethod
   private async getPasswordHash(password: string): Promise<string> {
     return await bcrypt.hash(password, AUTH_CONSTANTS.configuration.bcrypt.salt);
   }
 
+  @LogMethod
   private async saveNewUserApplication(request: UserRegisterRequestDto, userId: number): Promise<UserApplication> {
     const NEW_USER_APPLICATION: UserApplication = new UserApplication();
 
@@ -123,6 +150,7 @@ export class AuthService implements IAuthService {
     return NEW_USER_APPLICATION;
   }
 
+  @LogMethod
   private async validateArgumentsForLogin(request: UserAuthenticatorDto): Promise<void> {
     if (!request.email.trim()?.length) {
       throw new BadRequestException(USER_CONSTANTS.messages.emailIsRequired());
@@ -141,11 +169,8 @@ export class AuthService implements IAuthService {
     await this._applicationService.validateIsApplicationNotFoundById(APPLICATION_ID);
   }
 
+  @LogMethod
   private async validateArgumentsForLogout(request: UserLogoutRequestDto): Promise<void> {
-    if (!request.token.trim()?.length) {
-      throw new BadRequestException(USER_CONSTANTS.messages.tokenIsRequired());
-    }
-
     if (!request.userId || request.userId <= 0) {
       throw new BadRequestException(USER_CONSTANTS.messages.userIdIsRequired());
     }

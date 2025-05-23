@@ -8,4 +8,4 @@ export class GetUserRequestDto {
   public id!: number;
 }
 
-export class GetUserResponseDto extends GlobalResponseDto<UserDto> {}
+export class GetUserResponseDto extends GlobalResponseDto<UserDto | null> {}
