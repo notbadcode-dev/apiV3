@@ -1,3 +1,4 @@
+import { APP_CONSTANTS } from '@common/constants/app.constants';
 import { ILogMethod } from '@common/dtos/log-method.dto';
 import { LogPropertyDescriptorDto } from '@common/dtos/log-property-descriptor.dto';
 import { LOGGING_CONSTANTS } from '@common/modules/logging/constants/logging.constants';
@@ -5,6 +6,10 @@ import { LoggingService } from '@common/modules/logging/services/logging.service
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function LogMethod(target: object, key: string, descriptor: PropertyDescriptor): void {
+  if (process.env.NODE_ENV === APP_CONSTANTS.environment.nodeEnvTest) {
+    return;
+  }
+
   const LOG_PROPERTY_DESCRIPTOR: LogPropertyDescriptorDto = descriptor as LogPropertyDescriptorDto;
 
   const LOG_METHOD: ILogMethod = {

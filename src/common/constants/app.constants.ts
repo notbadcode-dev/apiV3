@@ -114,5 +114,7 @@ export const APP_CONSTANTS = {
 
     jwtSecret: 'JWT_SECRET',
     jwtExpiration: 'JWT_EXPIRATION',
+
+    nodeEnvTest: 'test',
   },
 };
