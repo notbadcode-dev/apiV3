@@ -1,5 +1,5 @@
-import { ApplicationDto } from '@modules/application/dtos/application.dto';
-import { Application } from '@modules/application/entities/application.entity';
+import { ApplicationDto } from '@user-application-api/modules/application/dtos/application.dto';
+import { Application } from '@user-application-api/modules/application/entities/application.entity';
 import { plainToClass } from 'class-transformer';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 

@@ -1,9 +1,9 @@
 import { RedisService } from '@common/modules/redis/services/redis.service';
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
 
 import { TokenServiceTestData } from './data/token-service-test.data';
 
@@ -40,13 +40,13 @@ beforeEach(async () => {
 it('should throw BadRequestException if email is empty and not call sign method', async () => {
   const REQUEST: AccessTokenPayloadDto = TokenServiceTestData.getAccessTokenPayloadWithEmptyEmail();
 
-  await expect(tokenService.getAccessToken(REQUEST)).rejects.toThrowErrorMatchingInlineSnapshot(USER_CONSTANTS.messages.emailIsRequired());
+  await expect(tokenService.getAccessToken(REQUEST)).rejects.toThrow(USER_CONSTANTS.messages.emailIsRequired());
 });
 
 it('should throw BadRequestException if userId is invalid and not call sign method', async () => {
   const REQUEST: AccessTokenPayloadDto = TokenServiceTestData.getAccessTokenPayloadWithInvalidUserId();
 
-  await expect(tokenService.getAccessToken(REQUEST)).rejects.toThrowErrorMatchingInlineSnapshot(USER_CONSTANTS.messages.userIdIsRequired());
+  await expect(tokenService.getAccessToken(REQUEST)).rejects.toThrow(USER_CONSTANTS.messages.userIdIsRequired());
 });
 
 it('should generate a new token and store it in Redis if tryGetIfExists is false', async () => {

@@ -7,11 +7,12 @@
     "moduleResolution":              "node",           // Usa la resolución de módulos estilo Node.js
     "baseUrl":                       "./",             // Base para rutas relativas
     "paths": {
-      "@modules/*":                  ["./src/modules/*"],       // Alias para módulos
-      "@common/*":                   ["./src/common/*"],        // Alias para comunes
-      "@cert/*":                     ["./cert/*"],              // Alias para certificados
-      "@test/*":                     ["test/*"],                // Alias para pruebas
-      "@environment/*":              ["./environment/*"]        // Alias para entorno
+      "@auth-api/*":                 ["./src/api/auth-api/*"],              // Alias para auth-api
+      "@user-application-api/*":     ["./src/api/user-application-api/*"],  // Alias para auth-api
+      "@common/*":                   ["./src/common/*"],                    // Alias para comunes
+      "@cert/*":                     ["./cert/*"],                          // Alias para certificados
+      "@test/*":                     ["test/*"],                            // Alias para pruebas
+      "@environment/*":              ["./environment/*"]                    // Alias para entorno
     },
 
     // ----------------------------------------

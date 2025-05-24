@@ -1,8 +1,8 @@
-import { Application } from '@modules/application/entities/application.entity';
-import { User } from '@modules/user/entities/user.entity';
-import { UserApplicationDto } from '@modules/user-application/dtos/user-application.dto';
-import { ValidateUserAccessOnApplicationDto } from '@modules/user-application/dtos/validate-user-access-on-application.dto';
-import { UserApplication } from '@modules/user-application/entities/user-application.entity';
+import { Application } from '@user-application-api/modules/application/entities/application.entity';
+import { User } from '@user-application-api/modules/user/entities/user.entity';
+import { UserApplicationDto } from '@user-application-api/modules/user-application/dtos/user-application.dto';
+import { ValidateUserAccessOnApplicationDto } from '@user-application-api/modules/user-application/dtos/validate-user-access-on-application.dto';
+import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
 import { plainToClass } from 'class-transformer';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 

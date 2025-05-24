@@ -1,5 +1,5 @@
-import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
 
+import { GetUserRequestDto } from '../dtos/getUser.dto';
 import { UserDto } from '../dtos/user.dto';
 
 export interface IUserService {

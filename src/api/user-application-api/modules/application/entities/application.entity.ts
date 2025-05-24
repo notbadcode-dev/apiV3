@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-import { BaseEntity } from '../../../common/modules/database/entities/base.entity';
+import { BaseEntity } from '../../../../../common/modules/database/entities/base.entity';
 import { APPLICATION_CONSTANTS } from '../constants/application.constants';
 
 @Entity('applications')

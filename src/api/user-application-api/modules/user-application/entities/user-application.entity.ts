@@ -1,7 +1,7 @@
 import { BaseEntity } from '@common/modules/database/entities/base.entity';
-import { Application } from '@modules/application/entities/application.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
+import { Application } from '../../application/entities/application.entity';
 import { User } from '../../user/entities/user.entity';
 
 @Entity('userApplications')

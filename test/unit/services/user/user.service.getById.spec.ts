@@ -1,11 +1,11 @@
 import { ArgumentException } from '@common/exceptions/argument.exception';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { User } from '@modules/user/entities/user.entity';
-import { UserService } from '@modules/user/services/user.service';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
+import { User } from '@user-application-api/modules/user/entities/user.entity';
+import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { Repository } from 'typeorm';
 
 import { UserServiceTestData } from './data/user-service-test.data';

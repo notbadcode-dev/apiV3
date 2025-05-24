@@ -1,7 +1,7 @@
-import { UserApplication } from '@modules/user-application/entities/user-application.entity';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { UserApplication } from './entities/user-application.entity';
 import { UserApplicationService } from './services/user-application.service';
 
 @Module({

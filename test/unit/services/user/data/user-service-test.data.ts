@@ -1,6 +1,6 @@
-import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { User } from '@modules/user/entities/user.entity';
+import { GetUserRequestDto } from '@user-application-api/modules/user/dtos/getUser.dto';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
+import { User } from '@user-application-api/modules/user/entities/user.entity';
 import { plainToClass } from 'class-transformer';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 

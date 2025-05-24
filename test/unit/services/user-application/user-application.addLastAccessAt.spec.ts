@@ -1,10 +1,10 @@
-import { USER_APPLICATION_CONSTANTS } from '@modules/user-application/constants/user-application.constants';
-import { UserApplicationDto } from '@modules/user-application/dtos/user-application.dto';
-import { UserApplication } from '@modules/user-application/entities/user-application.entity';
-import { UserApplicationService } from '@modules/user-application/services/user-application.service';
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { USER_APPLICATION_CONSTANTS } from '@user-application-api/modules/user-application/constants/user-application.constants';
+import { UserApplicationDto } from '@user-application-api/modules/user-application/dtos/user-application.dto';
+import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
+import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 import { Repository } from 'typeorm';
 
 import { UserApplicationServiceTestData } from './data/user-application-service-test.data';

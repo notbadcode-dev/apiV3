@@ -1,6 +1,6 @@
 import { DeleteBaseEntity } from '@common/modules/database/entities/delete-base.entity';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { USER_CONSTANTS } from '../constants/user.constants';
 
 @Entity('users')
 export class User extends DeleteBaseEntity {

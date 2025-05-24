@@ -1,9 +1,9 @@
-import { UserLoginRequestDto } from '@modules/auth/dtos/userLogin.dto';
-import { UserLogoutRequestDto } from '@modules/auth/dtos/userLogout.dto';
-import { UserRefreshRequestDto } from '@modules/auth/dtos/userRefresh.dto';
-import { UserRegisterRequestDto } from '@modules/auth/dtos/userRegister.dto';
-import { EAuthenticationType } from '@modules/auth/enums/authentication-type.enum';
-import { UserDto } from '@modules/user/dtos/user.dto';
+import { UserLoginRequestDto } from '@auth-api/modules/auth/dtos/userLogin.dto';
+import { UserLogoutRequestDto } from '@auth-api/modules/auth/dtos/userLogout.dto';
+import { UserRefreshRequestDto } from '@auth-api/modules/auth/dtos/userRefresh.dto';
+import { UserRegisterRequestDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
+import { EAuthenticationType } from '@auth-api/modules/auth/enums/authentication-type.enum';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 
 export class AuthServiceTestData {
   public static getValidUserRegisterRequest(): UserRegisterRequestDto {

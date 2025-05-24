@@ -1,10 +1,11 @@
 import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { RedisService } from '@common/modules/redis/services/redis.service';
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
 import { BadRequestException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 // eslint-disable-next-line @typescript-eslint/naming-convention
+
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
 
 import { ITokenService } from './token.service.interface';
 import { TOKEN_CONSTANTS } from '../constants/token.constants';
@@ -26,21 +27,17 @@ export class TokenService implements ITokenService {
   public async getAccessToken(accessTokenPayload: AccessTokenPayloadDto): Promise<string> {
     this.validateArgumentsForGetAccessToken(accessTokenPayload);
 
-    if (!accessTokenPayload.tryGetIfExists) {
-      const ACCESS_TOKEN: string = await this._jwtService.signAsync(accessTokenPayload);
-
-      await this._redisService.setAccessToken(accessTokenPayload.userId, ACCESS_TOKEN);
-
-      return ACCESS_TOKEN;
+    if (accessTokenPayload.tryGetIfExists) {
+      const EXISTING_TOKEN = await this.getExistingToken(accessTokenPayload.userId);
+      if (EXISTING_TOKEN) {
+        return EXISTING_TOKEN;
+      }
     }
 
-    const EXISTING_TOKEN = await this.getExistingToken(accessTokenPayload.userId);
+    const NEW_TOKEN = await this._jwtService.signAsync(accessTokenPayload);
+    await this._redisService.setAccessToken(accessTokenPayload.userId, NEW_TOKEN);
 
-    if (!EXISTING_TOKEN?.length) {
-      return '';
-    }
-
-    return EXISTING_TOKEN;
+    return NEW_TOKEN ?? '';
   }
 
   @LogMethod

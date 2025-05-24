@@ -1,22 +1,22 @@
+import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
+import { UserRefreshResponseDto } from '@auth-api/modules/auth/dtos/userRefresh.dto';
+import { AuthService } from '@auth-api/modules/auth/services/auth.service';
 import { EMessageType } from '@common/enums/message-type.enum';
 import { TokenService } from '@common/modules/token/services/token.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
-import { ApplicationService } from '@modules/application/services/application.service';
-import { AUTH_CONSTANTS } from '@modules/auth/constants/auth.constants';
-import { UserRefreshResponseDto } from '@modules/auth/dtos/userRefresh.dto';
-import { AuthService } from '@modules/auth/services/auth.service';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { UserService } from '@modules/user/services/user.service';
-import { UserApplicationService } from '@modules/user-application/services/user-application.service';
 import { UnauthorizedException } from '@nestjs/common';
+import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
+import { UserService } from '@user-application-api/modules/user/services/user.service';
+import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 
 // Test Data
 import { AuthServiceTestData } from './data/auth-service-test.data';
 
 jest.mock('@common/utils/global-response.service');
-jest.mock('@modules/user/services/user.service');
-jest.mock('@modules/user-application/services/user-application.service');
-jest.mock('@modules/application/services/application.service');
+jest.mock('@user-application-api/modules/user/services/user.service');
+jest.mock('@user-application-api/modules/user-application/services/user-application.service');
+jest.mock('@user-application-api/modules/application/services/application.service');
 jest.mock('@common/modules/token/services/token.service');
 
 // eslint-disable-next-line import/order

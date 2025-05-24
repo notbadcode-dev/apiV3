@@ -1,16 +1,16 @@
+import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
+import { UserLogoutRequestDto, UserLogoutResponseDto } from '@auth-api/modules/auth/dtos/userLogout.dto';
+import { AuthService } from '@auth-api/modules/auth/services/auth.service';
 import { EMessageType } from '@common/enums/message-type.enum';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
 import { TokenService } from '@common/modules/token/services/token.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
-import { ApplicationService } from '@modules/application/services/application.service';
-import { AUTH_CONSTANTS } from '@modules/auth/constants/auth.constants';
-import { UserLogoutRequestDto, UserLogoutResponseDto } from '@modules/auth/dtos/userLogout.dto';
-import { AuthService } from '@modules/auth/services/auth.service';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { UserService } from '@modules/user/services/user.service';
-import { UserApplicationService } from '@modules/user-application/services/user-application.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
+import { UserService } from '@user-application-api/modules/user/services/user.service';
+import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 
 import { AuthServiceTestData } from './data/auth-service-test.data';
 

@@ -1,11 +1,11 @@
 import { DatabaseModule } from '@common/modules/database/database.module';
 import { TokenModule } from '@common/modules/token/token.module';
-import { ApplicationModule } from '@modules/application/application.module';
-import { UserModule } from '@modules/user/user.module';
-import { UserApplication } from '@modules/user-application/entities/user-application.entity';
-import { UserApplicationModule } from '@modules/user-application/user-application.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApplicationModule } from '@user-application-api/modules/application/application.module';
+import { UserModule } from '@user-application-api/modules/user/user.module';
+import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
+import { UserApplicationModule } from '@user-application-api/modules/user-application/user-application.module';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';

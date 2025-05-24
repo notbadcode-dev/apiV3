@@ -1,6 +1,6 @@
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
 import { Expose } from 'class-transformer';
 import { IsEmail, IsInt, IsString, Length } from 'class-validator';
+import { USER_CONSTANTS } from '../constants/user.constants';
 
 export class UserDto {
   @Expose()

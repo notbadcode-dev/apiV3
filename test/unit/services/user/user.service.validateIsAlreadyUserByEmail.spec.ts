@@ -1,9 +1,9 @@
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { User } from '@modules/user/entities/user.entity';
-import { UserService } from '@modules/user/services/user.service';
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
+import { User } from '@user-application-api/modules/user/entities/user.entity';
+import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { Repository } from 'typeorm';
 
 import { UserServiceTestData } from './data/user-service-test.data';

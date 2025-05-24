@@ -1,10 +1,10 @@
 import { GlobalResponseService } from '@common/utils/global-response.service';
-import { GetUserRequestDto, GetUserResponseDto } from '@modules/user/dtos/getUser.dto';
-import { UserService } from '@modules/user/services/user.service';
 import { Body, Controller, Post } from '@nestjs/common';
 
 import { USER_CONSTANTS } from './constants/user.constants';
+import { GetUserRequestDto, GetUserResponseDto } from './dtos/getUser.dto';
 import { UserDto } from './dtos/user.dto';
+import { UserService } from './services/user.service';
 
 @Controller('user')
 export class UsersController {

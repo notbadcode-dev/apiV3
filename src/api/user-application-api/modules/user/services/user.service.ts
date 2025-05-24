@@ -1,14 +1,14 @@
 import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { ArgumentException } from '@common/exceptions/argument.exception';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { User } from '@modules/user/entities/user.entity';
-import { IUserService } from '@modules/user/services/user.service.interface';
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
+import { USER_CONSTANTS } from '../constants/user.constants';
+import { GetUserRequestDto } from '../dtos/getUser.dto';
+import { UserDto } from '../dtos/user.dto';
+import { User } from '../entities/user.entity';
+import { IUserService } from './user.service.interface';
 
 @Injectable()
 export class UserService implements IUserService {

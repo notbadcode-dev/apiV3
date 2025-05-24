@@ -3,16 +3,16 @@ import { TransactionService } from '@common/modules/database/services/transactio
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
-import { ApplicationService } from '@modules/application/services/application.service';
-import { USER_CONSTANTS } from '@modules/user/constants/user.constants';
-import { GetUserRequestDto } from '@modules/user/dtos/getUser.dto';
-import { UserDto } from '@modules/user/dtos/user.dto';
-import { User } from '@modules/user/entities/user.entity';
-import { UserService } from '@modules/user/services/user.service';
-import { ValidateUserAccessOnApplicationDto } from '@modules/user-application/dtos/validate-user-access-on-application.dto';
-import { UserApplication } from '@modules/user-application/entities/user-application.entity';
-import { UserApplicationService } from '@modules/user-application/services/user-application.service';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
+import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
+import { GetUserRequestDto } from '@user-application-api/modules/user/dtos/getUser.dto';
+import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
+import { User } from '@user-application-api/modules/user/entities/user.entity';
+import { UserService } from '@user-application-api/modules/user/services/user.service';
+import { ValidateUserAccessOnApplicationDto } from '@user-application-api/modules/user-application/dtos/validate-user-access-on-application.dto';
+import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
+import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 import * as bcrypt from 'bcryptjs';
 
 import { IAuthService } from './auth.service.interface';

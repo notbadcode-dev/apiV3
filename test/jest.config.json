@@ -14,7 +14,8 @@
   "testEnvironment": "node",
   "testRegex": ".*\\.spec\\.ts$|.*\\.e2e-spec\\.ts$",
   "moduleNameMapper": {
-    "^@modules/(.*)$": "<rootDir>/src/modules/$1",
+    "^@auth-api/(.*)$": "<rootDir>/src/api/auth-api/$1",
+    "^@user-application-api/(.*)$": "<rootDir>/src/api/user-application-api/$1",
     "^@common/(.*)$": "<rootDir>/src/common/$1",
     "^@test/(.*)$": "<rootDir>/test/$1"
   },
