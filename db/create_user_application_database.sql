@@ -90,16 +90,24 @@ CREATE TABLE
         CONSTRAINT FK_Application FOREIGN KEY (ApplicationId) REFERENCES Applications (Id)
     ) ENGINE = InnoDB;
 
+DROP TABLE IF EXISTS LoginHistory;
+
 -- Crear la tabla LoginHistory
 CREATE TABLE
     LoginHistory (
         Id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         UserId INT UNSIGNED NOT NULL,
+        ApplicationId INT UNSIGNED NOT NULL,
         LoginAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         IpAddress VARCHAR(45), -- Dirección IP
         UserAgent VARCHAR(255), -- Información del navegador/dispositivo
         Success BOOLEAN DEFAULT TRUE, -- Si el inicio de sesión fue exitoso
+        FailureReason VARCHAR(255) NULL, -- Motivo del fallo si Success = FALSE
+        FOREIGN KEY (UserId) REFERENCES Users (Id),
+        FOREIGN KEY (ApplicationId) REFERENCES Applications (Id),
+        INDEX (Id),
         INDEX (UserId),
+        INDEX (ApplicationId),
         INDEX (LoginAt)
     ) ENGINE = InnoDB;
 
@@ -107,12 +115,13 @@ CREATE TABLE
 CREATE TABLE
     AuditLogs (
         Id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        EntityName VARCHAR(255),
         EntityId INT UNSIGNED,
-        ActionType ENUM ('CREATE', 'UPDATE', 'DELETE') NOT NULL, -- Acción realizada (sin valor vacío)
+        EntityReference VARCHAR(255),
+        EntityTableName VARCHAR(100) NOT NULL, -- Nombre de la tabla afectada
+        ActionType ENUM ('CREATE', 'UPDATE', 'DELETE', 'ACTION') NOT NULL, -- Acción realizada (sin valor vacío)
         ActionDetail VARCHAR(250), -- Detalles sobre el cambio realizado (cambiado de JSON a VARCHAR(250))
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        UserId INT UNSIGNED, -- Quien hizo el cambio (puede ser un administrador o sistema)
+        UserCode VARCHAR(100) NULL, -- Código del usuario que realizó la acción
         INDEX (EntityName),
         INDEX (EntityId),
         INDEX (CreatedAt)

@@ -1,4 +1,5 @@
 import { LogMethod } from '@common/decorators/logged-method.decorator';
+import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
@@ -9,7 +10,8 @@ import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/use
 import { GetUserRequestDto } from '@user-application-api/modules/user/dtos/getUser.dto';
 import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 import { User } from '@user-application-api/modules/user/entities/user.entity';
-import { UserService } from '@user-application-api/modules/user/services/user.service';
+import { LoginHistoryService } from '@user-application-api/modules/user/services/login-history/login-history.service';
+import { UserService } from '@user-application-api/modules/user/services/user/user.service';
 import { ValidateUserAccessOnApplicationDto } from '@user-application-api/modules/user-application/dtos/validate-user-access-on-application.dto';
 import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
@@ -34,6 +36,7 @@ export class AuthService implements IAuthService {
     private readonly _applicationService: ApplicationService,
     private readonly _userApplicationService: UserApplicationService,
     private readonly _transactionService: TransactionService,
+    private readonly _logHistoryService: LoginHistoryService,
   ) {}
 
   //#endregion
@@ -59,7 +62,7 @@ export class AuthService implements IAuthService {
   }
 
   @LogMethod
-  public async login(request: UserLoginRequestDto): Promise<UserLoginResponseDto> {
+  public async login(metadata: RequestMetadataDto, request: UserLoginRequestDto): Promise<UserLoginResponseDto> {
     await this.validateArgumentsForLogin(request);
 
     const USER: UserDto | null = await this._userService.getUserByEmail(request.email);
@@ -72,12 +75,14 @@ export class AuthService implements IAuthService {
 
     const IS_PASSWORD_VALID = await bcrypt.compare(request.passwordHash, USER?.passwordHash ?? '');
     if (!IS_PASSWORD_VALID) {
+      await this.manageFailureLogin(USER, request, metadata);
       throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials());
     }
 
     const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0, tryGetIfExists: true };
     const ACCESS_TOKEN = await this._tokenService.getAccessToken(ACCESS_TOKEN_PAYLOAD);
 
+    await this.manageSuccessfullyLogin(USER, request, metadata);
     return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, AUTH_CONSTANTS.messages.loginSuccessfully());
   }
 
@@ -174,6 +179,27 @@ export class AuthService implements IAuthService {
     if (!request.userId || request.userId <= 0) {
       throw new BadRequestException(USER_CONSTANTS.messages.userIdIsRequired());
     }
+  }
+
+  @LogMethod
+  private async manageFailureLogin(user: UserDto | null, request: UserLoginRequestDto, metadata: RequestMetadataDto): Promise<void> {
+    await this._logHistoryService.setLoginHistoryFailed({
+      userId: user?.id ?? 0,
+      applicationId: request.applicationId,
+      ipAddress: metadata.ipAddress,
+      userAgent: metadata.userAgent,
+      failureReason: AUTH_CONSTANTS.messages.invalidCredentials(),
+    });
+  }
+
+  @LogMethod
+  private async manageSuccessfullyLogin(user: UserDto | null, request: UserLoginRequestDto, metadata: RequestMetadataDto): Promise<void> {
+    await this._logHistoryService.setLoginHistorySuccessfully({
+      userId: user?.id ?? 0,
+      applicationId: request.applicationId,
+      ipAddress: metadata.ipAddress,
+      userAgent: metadata.userAgent,
+    });
   }
 
   //#endregion

@@ -100,6 +100,13 @@ export const APP_CONSTANTS = {
     token: {
       strategy: 'jwt',
     },
+    httpHeader: {
+      useragent: 'user-agent',
+      forwardedFor: 'x-forwarded-for',
+      applicationId: 'x-application-id',
+
+      defaultHeaderValue: 'unknown',
+    },
   },
 
   environment: {

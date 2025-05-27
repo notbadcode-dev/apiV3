@@ -1,3 +1,5 @@
+import { RequestMetadata } from '@common/decorators/request-metadata.decorator';
+import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { JwtAuthGuard } from '@common/modules/token/guards/jwt-auth.guard';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
@@ -18,8 +20,8 @@ export class AuthController {
   }
 
   @Post('login')
-  public async login(@Body() request: UserAuthenticatorDto): Promise<UserLoginResponseDto> {
-    return await this._authService.login(request);
+  public async login(@RequestMetadata() metadata: RequestMetadataDto, @Body() request: UserAuthenticatorDto): Promise<UserLoginResponseDto> {
+    return await this._authService.login(metadata, request);
   }
 
   @Post('logout')

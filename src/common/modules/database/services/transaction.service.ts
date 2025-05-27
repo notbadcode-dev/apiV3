@@ -10,6 +10,8 @@ export class TransactionService {
   private queryRunner!: QueryRunner;
   private dataSource: DataSource;
 
+  private _manager: EntityManager | null = null;
+
   constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
   }
@@ -37,17 +39,8 @@ export class TransactionService {
     }
   }
 
-  @LogMethod
   public get manager(): EntityManager | null {
-    if (this.queryRunner.hasOwnProperty('manager')) {
-      return this.queryRunner?.manager;
-    }
-
-    if (this.dataSource.hasOwnProperty('manager')) {
-      return this.dataSource?.manager;
-    }
-
-    return null;
+    return this._manager ? this._manager : null;
   }
 
   //#endregion

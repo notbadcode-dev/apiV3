@@ -1,5 +1,6 @@
 import { GlobalResponseDto } from '@common/dtos/response-base.dto';
 import { IsInt, IsPositive } from 'class-validator';
+
 import { UserDto } from './user.dto';
 
 export class GetUserRequestDto {
