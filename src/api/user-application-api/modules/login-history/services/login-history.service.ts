@@ -1,9 +1,9 @@
 import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SetLoginHistoryDto } from '@user-application-api/modules/user/dtos/setLoginHistory.dto';
-import { LoginHistory } from '@user-application-api/modules/user/entities/login-history.entity';
-import { ILoginHistoryService } from '@user-application-api/modules/user/services/login-history/login-history.service.interface';
+import { SetLoginHistoryDto } from '@user-application-api/modules/login-history/dtos/setLoginHistory.dto';
+import { LoginHistory } from '@user-application-api/modules/login-history/entities/login-history.entity';
+import { ILoginHistoryService } from '@user-application-api/modules/login-history/services/login-history.service.interface';
 import { Repository } from 'typeorm';
 
 @Injectable()
