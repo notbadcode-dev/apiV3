@@ -1,6 +1,6 @@
 import { GlobalResponseDto } from '@common/dtos/response-base.dto';
 
-import { UserAuthenticatorDto } from './userAuthenticator.dto';
+import { UserAuthenticatorDto } from './user-authenticator.dto';
 
 export class UserLoginRequestDto extends UserAuthenticatorDto {}
 

@@ -21,11 +21,11 @@ import { EntityManager } from 'typeorm';
 
 import { IAuthService } from './auth.service.interface';
 import { AUTH_CONSTANTS } from '../constants/auth.constants';
-import { UserAuthenticatorDto } from '../dtos/userAuthenticator.dto';
-import { UserLoginRequestDto, UserLoginResponseDto } from '../dtos/userLogin.dto';
-import { UserLogoutRequestDto, UserLogoutResponseDto } from '../dtos/userLogout.dto';
-import { UserRefreshRequestDto, UserRefreshResponseDto } from '../dtos/userRefresh.dto';
-import { UserRegisterRequestDto, UserRegisterResponseDto } from '../dtos/userRegister.dto';
+import { UserAuthenticatorDto } from '../dtos/user-authenticator.dto';
+import { UserLoginRequestDto, UserLoginResponseDto } from '../dtos/user-login.dto';
+import { UserLogoutRequestDto, UserLogoutResponseDto } from '../dtos/user-logout.dto';
+import { UserRefreshRequestDto, UserRefreshResponseDto } from '../dtos/user-refresh.dto';
+import { UserRegisterRequestDto, UserRegisterResponseDto } from '../dtos/user-register.dto';
 import { EAuthenticationType } from '../enums/authentication-type.enum';
 
 @Injectable()

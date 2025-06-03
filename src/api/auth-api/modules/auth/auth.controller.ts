@@ -3,11 +3,11 @@ import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { JwtAuthGuard } from '@common/modules/token/guards/jwt-auth.guard';
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
-import { UserAuthenticatorDto } from './dtos/userAuthenticator.dto';
-import { UserLoginResponseDto } from './dtos/userLogin.dto';
-import { UserLogoutRequestDto, UserLogoutResponseDto } from './dtos/userLogout.dto';
-import { UserRefreshRequestDto, UserRefreshResponseDto } from './dtos/userRefresh.dto';
-import { UserRegisterResponseDto } from './dtos/userRegister.dto';
+import { UserAuthenticatorDto } from './dtos/user-authenticator.dto';
+import { UserLoginResponseDto } from './dtos/user-login.dto';
+import { UserLogoutRequestDto, UserLogoutResponseDto } from './dtos/user-logout.dto';
+import { UserRefreshRequestDto, UserRefreshResponseDto } from './dtos/user-refresh.dto';
+import { UserRegisterResponseDto } from './dtos/user-register.dto';
 import { AuthService } from './services/auth.service';
 
 @Controller('auth')

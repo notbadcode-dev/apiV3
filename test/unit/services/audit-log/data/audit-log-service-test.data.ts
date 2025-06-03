@@ -1,5 +1,5 @@
 import { AddAuditLogDto } from '@audit-api/modules/audit/dtos/add-audit-log.dto';
-import { AuditLog } from '@audit-api/modules/audit/entities/AuditLog.entity';
+import { AuditLog } from '@audit-api/modules/audit/entities/audit-log.entity';
 import { EAuditActionType } from '@audit-api/modules/audit/enums/audit-action-type.enum';
 
 export class AuditLogServiceTestData {

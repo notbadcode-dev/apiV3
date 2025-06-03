@@ -1,6 +1,6 @@
 import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
-import { UserRegisterRequestDto, UserRegisterResponseDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
+import { UserRegisterRequestDto, UserRegisterResponseDto } from '@auth-api/modules/auth/dtos/user-register.dto';
 import { AuthService } from '@auth-api/modules/auth/services/auth.service';
 import { EMessageType } from '@common/enums/message-type.enum';
 import { TransactionService } from '@common/modules/database/services/transaction.service';

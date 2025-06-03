@@ -1,5 +1,5 @@
 import { AddAuditLogDto } from '@audit-api/modules/audit/dtos/add-audit-log.dto';
-import { AuditLog } from '@audit-api/modules/audit/entities/AuditLog.entity';
+import { AuditLog } from '@audit-api/modules/audit/entities/audit-log.entity';
 import { EAuditActionType } from '@audit-api/modules/audit/enums/audit-action-type.enum';
 import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { Test, TestingModule } from '@nestjs/testing';

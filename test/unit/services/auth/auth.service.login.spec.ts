@@ -1,6 +1,6 @@
 import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
-import { UserLoginResponseDto } from '@auth-api/modules/auth/dtos/userLogin.dto';
+import { UserLoginResponseDto } from '@auth-api/modules/auth/dtos/user-login.dto';
 import { AuthService } from '@auth-api/modules/auth/services/auth.service';
 import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { EMessageType } from '@common/enums/message-type.enum';

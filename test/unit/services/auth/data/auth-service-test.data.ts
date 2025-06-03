@@ -1,7 +1,7 @@
-import { UserLoginRequestDto } from '@auth-api/modules/auth/dtos/userLogin.dto';
-import { UserLogoutRequestDto } from '@auth-api/modules/auth/dtos/userLogout.dto';
-import { UserRefreshRequestDto } from '@auth-api/modules/auth/dtos/userRefresh.dto';
-import { UserRegisterRequestDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
+import { UserLoginRequestDto } from '@auth-api/modules/auth/dtos/user-login.dto';
+import { UserLogoutRequestDto } from '@auth-api/modules/auth/dtos/user-logout.dto';
+import { UserRefreshRequestDto } from '@auth-api/modules/auth/dtos/user-refresh.dto';
+import { UserRegisterRequestDto } from '@auth-api/modules/auth/dtos/user-register.dto';
 import { EAuthenticationType } from '@auth-api/modules/auth/enums/authentication-type.enum';
 import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';

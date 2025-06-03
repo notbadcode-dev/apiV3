@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AuditLog } from './entities/AuditLog.entity';
+import { AuditLog } from './entities/audit-log.entity';
 import { AuditLogService } from './services/audit.service';
 
 @Module({

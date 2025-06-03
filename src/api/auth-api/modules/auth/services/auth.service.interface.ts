@@ -1,7 +1,7 @@
-import { UserLoginRequestDto, UserLoginResponseDto } from '@auth-api/modules/auth/dtos/userLogin.dto';
-import { UserLogoutRequestDto, UserLogoutResponseDto } from '@auth-api/modules/auth/dtos/userLogout.dto';
-import { UserRefreshRequestDto, UserRefreshResponseDto } from '@auth-api/modules/auth/dtos/userRefresh.dto';
-import { UserRegisterRequestDto, UserRegisterResponseDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
+import { UserLoginRequestDto, UserLoginResponseDto } from '@auth-api/modules/auth/dtos/user-login.dto';
+import { UserLogoutRequestDto, UserLogoutResponseDto } from '@auth-api/modules/auth/dtos/user-logout.dto';
+import { UserRefreshRequestDto, UserRefreshResponseDto } from '@auth-api/modules/auth/dtos/user-refresh.dto';
+import { UserRegisterRequestDto, UserRegisterResponseDto } from '@auth-api/modules/auth/dtos/user-register.dto';
 import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 
 export interface IAuthService {
