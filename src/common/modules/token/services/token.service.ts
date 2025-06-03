@@ -61,8 +61,6 @@ export class TokenService implements ITokenService {
       email: VERIFY_TOKEN.email,
       tryGetIfExists: false,
     };
-
-    await this._jwtService.verifyAsync<AccessTokenPayloadDto>(EXISTING_TOKEN);
     const NEW_TOKEN: string = await this.getAccessToken(ACCESS_TOKEN_PAYLOAD);
 
     return NEW_TOKEN;
