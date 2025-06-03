@@ -1,3 +1,4 @@
+import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { LogMethod } from '@common/decorators/logged-method.decorator';
 import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
@@ -16,6 +17,7 @@ import { ValidateUserAccessOnApplicationDto } from '@user-application-api/module
 import { UserApplication } from '@user-application-api/modules/user-application/entities/user-application.entity';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 import * as bcrypt from 'bcryptjs';
+import { EntityManager } from 'typeorm';
 
 import { IAuthService } from './auth.service.interface';
 import { AUTH_CONSTANTS } from '../constants/auth.constants';
@@ -37,6 +39,7 @@ export class AuthService implements IAuthService {
     private readonly _userApplicationService: UserApplicationService,
     private readonly _transactionService: TransactionService,
     private readonly _logHistoryService: LoginHistoryService,
+    private readonly _auditService: AuditLogService,
   ) {}
 
   //#endregion
@@ -49,15 +52,18 @@ export class AuthService implements IAuthService {
 
     await this._userService.validateIsAlreadyUserByEmail(request.email);
 
-    const NEW_USER_ENTITY_ID: number = await this._transactionService.runTransaction(async () => {
-      const NEW_USER_ENTITY = await this.saveNewUser(request);
+    const NEW_USER_ENTITY_ID: number = await this._transactionService.runTransaction(async (manager: EntityManager) => {
+      const NEW_USER_ENTITY = await this.saveNewUser(request, manager);
 
-      await this.saveNewUserApplication(request, NEW_USER_ENTITY.id);
+      await this.saveNewUserApplication(request, NEW_USER_ENTITY.id, manager);
 
       return NEW_USER_ENTITY.id;
     });
 
     const RESPONSE: UserRegisterResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(NEW_USER_ENTITY_ID, AUTH_CONSTANTS.messages.registrationSuccessfully());
+
+    await this.addAuditLog(NEW_USER_ENTITY_ID, request.email, AUTH_CONSTANTS.messages.registrationSuccessfully());
+
     return RESPONSE;
   }
 
@@ -83,6 +89,8 @@ export class AuthService implements IAuthService {
     const ACCESS_TOKEN = await this._tokenService.getAccessToken(ACCESS_TOKEN_PAYLOAD);
 
     await this.manageSuccessfullyLogin(USER, request, metadata);
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.loginSuccessfully());
+
     return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, AUTH_CONSTANTS.messages.loginSuccessfully());
   }
 
@@ -98,6 +106,8 @@ export class AuthService implements IAuthService {
     if (!IS_SUCCESSFULLY_REVOKED) {
       throw new UnauthorizedException(AUTH_CONSTANTS.messages.logoutAlreadyDone());
     }
+
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.logoutSuccessfully());
 
     return GlobalResponseService.getSuccessfullyGlobalResponse(IS_SUCCESSFULLY_REVOKED, AUTH_CONSTANTS.messages.logoutSuccessfully());
   }
@@ -118,6 +128,8 @@ export class AuthService implements IAuthService {
 
     await this._tokenService.refreshToken(request.userId);
 
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.tokenRefreshed());
+
     return GlobalResponseService.getSuccessfullyGlobalResponse(NEW_TOKEN, AUTH_CONSTANTS.messages.tokenRefreshed());
   }
 
@@ -126,14 +138,14 @@ export class AuthService implements IAuthService {
   //#region Private methods
 
   @LogMethod
-  private async saveNewUser(request: UserRegisterRequestDto): Promise<User> {
+  private async saveNewUser(request: UserRegisterRequestDto, manager: EntityManager): Promise<User> {
     const NEW_USER_ENTITY: User = new User();
 
     NEW_USER_ENTITY.email = request.email.trim().toLowerCase();
     NEW_USER_ENTITY.passwordHash = await this.getPasswordHash(request.passwordHash);
     NEW_USER_ENTITY.isActive = USER_CONSTANTS.defaults.isActive;
 
-    await this._transactionService.manager?.save(User, NEW_USER_ENTITY);
+    await manager?.save(User, NEW_USER_ENTITY);
 
     return NEW_USER_ENTITY;
   }
@@ -144,13 +156,13 @@ export class AuthService implements IAuthService {
   }
 
   @LogMethod
-  private async saveNewUserApplication(request: UserRegisterRequestDto, userId: number): Promise<UserApplication> {
+  private async saveNewUserApplication(request: UserRegisterRequestDto, userId: number, manager: EntityManager): Promise<UserApplication> {
     const NEW_USER_APPLICATION: UserApplication = new UserApplication();
 
     NEW_USER_APPLICATION.applicationId = request.applicationId;
     NEW_USER_APPLICATION.userId = userId;
 
-    await this._transactionService.manager?.save(UserApplication, NEW_USER_APPLICATION);
+    await manager?.save(UserApplication, NEW_USER_APPLICATION);
 
     return NEW_USER_APPLICATION;
   }
@@ -199,6 +211,16 @@ export class AuthService implements IAuthService {
       applicationId: request.applicationId,
       ipAddress: metadata.ipAddress,
       userAgent: metadata.userAgent,
+    });
+  }
+
+  @LogMethod
+  private async addAuditLog(userId: number, email: string, message: string): Promise<void> {
+    await this._auditService.addActionLog({
+      entityId: userId,
+      entityReference: email,
+      entityTableName: User.tableName,
+      actionDetail: message,
     });
   }
 

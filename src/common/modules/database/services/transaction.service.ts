@@ -10,8 +10,6 @@ export class TransactionService {
   private queryRunner!: QueryRunner;
   private dataSource: DataSource;
 
-  private _manager: EntityManager | null = null;
-
   constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
   }
@@ -21,12 +19,13 @@ export class TransactionService {
   //#region Public methods
 
   @LogMethod
-  public async runTransaction<T>(callback: () => Promise<T>): Promise<T> {
+  public async runTransaction<T>(callback: (manager: EntityManager) => Promise<T>): Promise<T> {
     this.queryRunner = this.dataSource.createQueryRunner();
+    await this.queryRunner.connect();
     await this.queryRunner.startTransaction();
 
     try {
-      const RESULT = await callback();
+      const RESULT = await callback(this.queryRunner.manager);
       await this.queryRunner.commitTransaction();
       return RESULT;
     } catch (error) {
@@ -37,10 +36,6 @@ export class TransactionService {
     } finally {
       await this.queryRunner.release();
     }
-  }
-
-  public get manager(): EntityManager | null {
-    return this._manager ? this._manager : null;
   }
 
   //#endregion

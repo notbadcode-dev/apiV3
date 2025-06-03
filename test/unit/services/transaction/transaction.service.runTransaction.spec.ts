@@ -6,64 +6,73 @@ import { DataSource, EntityManager, QueryRunner } from 'typeorm';
 import { TransactionServiceTestData } from './data/transaction-service-test.data';
 
 let transactionService: TransactionService;
-let dataSourceMock: Partial<DataSource>;
-let queryRunnerMock: jest.Mocked<Partial<QueryRunner>>;
-let managerMock: jest.Mocked<Partial<EntityManager>>;
+let queryRunnerMock: Partial<jest.Mocked<QueryRunner>>;
+let dataSourceMock: Partial<jest.Mocked<DataSource>>;
 
-beforeEach(async () => {
-  managerMock = {
+beforeEach(() => {
+  const MANAGER_MOCK = {
     save: jest.fn(),
-  } as jest.Mocked<Partial<EntityManager>>;
+  } as Partial<jest.Mocked<EntityManager>>;
 
   queryRunnerMock = {
+    connect: jest.fn(),
     startTransaction: jest.fn(),
     commitTransaction: jest.fn(),
     rollbackTransaction: jest.fn(),
     release: jest.fn(),
-    manager: managerMock as jest.Mocked<EntityManager>,
-  } as jest.Mocked<Partial<QueryRunner>>;
+    manager: MANAGER_MOCK,
+  } as Partial<jest.Mocked<EntityManager>>;
 
   dataSourceMock = {
-    createQueryRunner: jest.fn().mockReturnValue(queryRunnerMock), // Only mock this method
-  };
+    createQueryRunner: jest.fn().mockReturnValue(queryRunnerMock),
+  } as Partial<jest.Mocked<DataSource>>;
 
-  transactionService = new TransactionService(dataSourceMock as DataSource);
+  transactionService = new TransactionService(dataSourceMock as jest.Mocked<DataSource>);
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
 });
 
 it('should run transaction and commit if no errors', async () => {
   // Arrange
-  const CALLBACK_MOCK = jest.fn().mockResolvedValue(TransactionServiceTestData.getSuccessfullyTestResult());
+  const RESULT = TransactionServiceTestData.getSuccessfullyTestResult();
+  const CALL_BACK = jest.fn().mockResolvedValue(RESULT);
 
   // Act
-  const RESULT = await transactionService.runTransaction(CALLBACK_MOCK);
+  const RESPONSE = await transactionService.runTransaction(CALL_BACK);
 
   // Assert
-  expect(CALLBACK_MOCK).toHaveBeenCalled();
-  expect(RESULT).toBe(TransactionServiceTestData.getSuccessfullyTestResult());
+  expect(dataSourceMock.createQueryRunner).toHaveBeenCalled();
+  expect(queryRunnerMock.connect).toHaveBeenCalled();
+  expect(queryRunnerMock.startTransaction).toHaveBeenCalled();
+  expect(CALL_BACK).toHaveBeenCalledWith(queryRunnerMock.manager);
   expect(queryRunnerMock.commitTransaction).toHaveBeenCalled();
   expect(queryRunnerMock.release).toHaveBeenCalled();
+  expect(RESPONSE).toBe(RESULT);
 });
 
-it('should rollback transaction and throw InternalServerErrorException if error occurs', async () => {
+it('should rollback and throw InternalServerErrorException on error', async () => {
   // Arrange
-  const CALLBACK_MOCK = jest.fn().mockRejectedValue(TransactionServiceTestData.getNewError());
+  const CALL_BACK = jest.fn().mockRejectedValue(TransactionServiceTestData.getNewError());
 
   // Act & Assert
-  await expect(transactionService.runTransaction(CALLBACK_MOCK)).rejects.toThrow(new InternalServerErrorException(APP_CONSTANTS.message.dataBaseQueryFailed()));
+  await expect(transactionService.runTransaction(CALL_BACK)).rejects.toThrow(new InternalServerErrorException(APP_CONSTANTS.message.dataBaseQueryFailed()));
+
   expect(queryRunnerMock.rollbackTransaction).toHaveBeenCalled();
   expect(queryRunnerMock.release).toHaveBeenCalled();
 });
 
-it('should release queryRunner even if error occurs', async () => {
+it('should always release queryRunner even if error occurs', async () => {
   // Arrange
-  const CALLBACK_MOCK = jest.fn().mockRejectedValue(TransactionServiceTestData.getNewError());
+  const CALL_BACK = jest.fn().mockRejectedValue(TransactionServiceTestData.getNewError());
 
-  // Act & Assert
+  // Act
   try {
-    await transactionService.runTransaction(CALLBACK_MOCK);
-  } catch (error) {
+    await transactionService.runTransaction(CALL_BACK);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (_) {
     // Assert
-    expect(error).not.toBeNull();
     expect(queryRunnerMock.release).toHaveBeenCalled();
   }
 });

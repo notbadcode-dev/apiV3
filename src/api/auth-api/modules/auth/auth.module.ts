@@ -1,3 +1,4 @@
+import { AuditModule } from '@audit-api/modules/audit/audit.module';
 import { DatabaseModule } from '@common/modules/database/database.module';
 import { TokenModule } from '@common/modules/token/token.module';
 import { Module } from '@nestjs/common';
@@ -12,7 +13,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserApplication]), UserModule, ApplicationModule, UserApplicationModule, TokenModule, DatabaseModule, LoginHistoryModule],
+  imports: [TypeOrmModule.forFeature([UserApplication]), UserModule, ApplicationModule, UserApplicationModule, TokenModule, DatabaseModule, LoginHistoryModule, AuditModule],
   controllers: [AuthController],
   providers: [AuthService],
 })

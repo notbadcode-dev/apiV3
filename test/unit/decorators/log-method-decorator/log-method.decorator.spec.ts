@@ -1,3 +1,7 @@
+import { APP_CONSTANTS } from '@common/constants/app.constants';
+
+process.env.NODE_ENV = APP_CONSTANTS.environment.nodeEnvDevelopment;
+
 import { LOGGER } from '@common/modules/logging/services/logger.service';
 
 import { LogMethodDecoratorTestData } from './data/log-method-decorator-test.data';
@@ -12,6 +16,10 @@ jest.mock('@common/modules/logging/services/logger.service', () => ({
 
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterAll(() => {
+  process.env.NODE_ENV = APP_CONSTANTS.environment.nodeEnvTest;
 });
 
 it('should log start, end and error correctly for testMethod', async () => {

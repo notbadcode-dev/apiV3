@@ -1,6 +1,8 @@
+import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
 import { UserLoginResponseDto } from '@auth-api/modules/auth/dtos/userLogin.dto';
 import { AuthService } from '@auth-api/modules/auth/services/auth.service';
+import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { EMessageType } from '@common/enums/message-type.enum';
 // eslint-disable-next-line import/order
 import { TransactionService } from '@common/modules/database/services/transaction.service';
@@ -9,6 +11,7 @@ import { GlobalResponseService } from '@common/utils/global-response.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 // eslint-disable-next-line import/order
 import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
+import { LoginHistoryService } from '@user-application-api/modules/login-history/services/login-history.service';
 import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
 import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 import { UserService } from '@user-application-api/modules/user/services/user.service';
@@ -32,6 +35,8 @@ let applicationServiceMock: jest.Mocked<ApplicationService>;
 let userApplicationServiceMock: jest.Mocked<UserApplicationService>;
 let tokenServiceMock: jest.Mocked<TokenService>;
 let transactionServiceMock: jest.Mocked<TransactionService>;
+let loginHistoryServiceMock: jest.Mocked<LoginHistoryService>;
+let auditLogServiceMock: jest.Mocked<AuditLogService>;
 
 beforeEach(async () => {
   userServiceMock = {
@@ -54,24 +59,47 @@ beforeEach(async () => {
     runTransaction: jest.fn(),
   } as unknown as jest.Mocked<TransactionService>;
 
+  loginHistoryServiceMock = {
+    setLoginHistorySuccessfully: jest.fn(),
+    setLoginHistoryFailed: jest.fn(),
+  } as unknown as jest.Mocked<LoginHistoryService>;
+
+  auditLogServiceMock = {
+    addCreateLog: jest.fn(),
+    addUpdateLog: jest.fn(),
+    addDeleteLog: jest.fn(),
+    addActionLog: jest.fn(),
+  } as unknown as jest.Mocked<AuditLogService>;
+
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockClear();
 
-  authService = new AuthService(tokenServiceMock, userServiceMock, applicationServiceMock, userApplicationServiceMock, transactionServiceMock);
+  authService = new AuthService(
+    tokenServiceMock,
+    userServiceMock,
+    applicationServiceMock,
+    userApplicationServiceMock,
+    transactionServiceMock,
+    loginHistoryServiceMock,
+    auditLogServiceMock,
+  );
 });
 
 it('should throw BadRequestException if email is missing', async () => {
+  const METADATA: RequestMetadataDto = AuthServiceTestData.getValidRequestMetadataDto();
   const LOGIN_REQUEST = AuthServiceTestData.getUserLoginRequestWithEmptyEmail();
 
-  await expect(authService.login(LOGIN_REQUEST)).rejects.toThrow(new BadRequestException(USER_CONSTANTS.messages.emailIsRequired()));
+  await expect(authService.login(METADATA, LOGIN_REQUEST)).rejects.toThrow(new BadRequestException(USER_CONSTANTS.messages.emailIsRequired()));
 });
 
 it('should throw BadRequestException if password is missing', async () => {
+  const METADATA: RequestMetadataDto = AuthServiceTestData.getValidRequestMetadataDto();
   const LOGIN_REQUEST = AuthServiceTestData.getUserLoginRequestWithEmptyPasswordHash();
 
-  await expect(authService.login(LOGIN_REQUEST)).rejects.toThrow(new BadRequestException(USER_CONSTANTS.messages.passwordHashIsRequired()));
+  await expect(authService.login(METADATA, LOGIN_REQUEST)).rejects.toThrow(new BadRequestException(USER_CONSTANTS.messages.passwordHashIsRequired()));
 });
 
 it('should throw UnauthorizedException if password is incorrect', async () => {
+  const METADATA: RequestMetadataDto = AuthServiceTestData.getValidRequestMetadataDto();
   const LOGIN_REQUEST = AuthServiceTestData.getValidUserLoginRequest();
   const USER: UserDto = AuthServiceTestData.getValidUserDto();
 
@@ -80,10 +108,11 @@ it('should throw UnauthorizedException if password is incorrect', async () => {
   applicationServiceMock.validateIsApplicationNotFoundById.mockResolvedValue();
   userApplicationServiceMock.validateAccessUserOnApplication.mockResolvedValue();
 
-  await expect(authService.login(LOGIN_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials()));
+  await expect(authService.login(METADATA, LOGIN_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials()));
 });
 
 it('should return token response if credentials are valid', async () => {
+  const METADATA: RequestMetadataDto = AuthServiceTestData.getValidRequestMetadataDto();
   const LOGIN_REQUEST = AuthServiceTestData.getValidUserLoginRequest();
   const USER: UserDto = AuthServiceTestData.getValidUserDto();
   const ACCESS_TOKEN = 'mocked-token';
@@ -97,9 +126,10 @@ it('should return token response if credentials are valid', async () => {
   applicationServiceMock.validateIsApplicationNotFoundById.mockResolvedValue();
   userApplicationServiceMock.validateAccessUserOnApplication.mockResolvedValue();
   tokenServiceMock.getAccessToken.mockResolvedValue(ACCESS_TOKEN);
+  loginHistoryServiceMock.setLoginHistorySuccessfully.mockResolvedValue();
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockReturnValue(RESPONSE);
 
-  const RESULT = await authService.login(LOGIN_REQUEST);
+  const RESULT = await authService.login(METADATA, LOGIN_REQUEST);
 
   expect(userServiceMock.getUserByEmail).toHaveBeenCalledWith(LOGIN_REQUEST.email);
   expect(tokenServiceMock.getAccessToken).toHaveBeenCalled();

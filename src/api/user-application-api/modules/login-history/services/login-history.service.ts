@@ -27,7 +27,6 @@ export class LoginHistoryService implements ILoginHistoryService {
     };
 
     await this._loginHistoryRepository.save(LOGIN_HISTORY_ENTITY);
-    // await this._transactionService.manager?.save(LoginHistory, LOGIN_HISTORY_ENTITY);
   }
 
   public async setLoginHistoryFailed(setLoginHistoryDto: SetLoginHistoryDto): Promise<void> {
@@ -42,7 +41,6 @@ export class LoginHistoryService implements ILoginHistoryService {
     };
 
     await this._loginHistoryRepository.save(LOGIN_HISTORY_ENTITY);
-    // await this._transactionService.manager?.save(LoginHistory, LOGIN_HISTORY_ENTITY);
   }
 
   //#endregion

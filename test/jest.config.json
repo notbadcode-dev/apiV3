@@ -16,6 +16,7 @@
   "moduleNameMapper": {
     "^@auth-api/(.*)$": "<rootDir>/src/api/auth-api/$1",
     "^@user-application-api/(.*)$": "<rootDir>/src/api/user-application-api/$1",
+    "^@audit-api/(.*)$": "<rootDir>/src/api/audit-api/$1",
     "^@common/(.*)$": "<rootDir>/src/common/$1",
     "^@test/(.*)$": "<rootDir>/test/$1"
   },

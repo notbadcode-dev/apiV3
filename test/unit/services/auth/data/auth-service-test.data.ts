@@ -3,6 +3,7 @@ import { UserLogoutRequestDto } from '@auth-api/modules/auth/dtos/userLogout.dto
 import { UserRefreshRequestDto } from '@auth-api/modules/auth/dtos/userRefresh.dto';
 import { UserRegisterRequestDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
 import { EAuthenticationType } from '@auth-api/modules/auth/enums/authentication-type.enum';
+import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 
 export class AuthServiceTestData {
@@ -104,6 +105,14 @@ export class AuthServiceTestData {
   public static getRefreshRequestWithInvalidUserId(): UserRefreshRequestDto {
     return {
       userId: 0,
+    };
+  }
+
+  public static getValidRequestMetadataDto(): RequestMetadataDto {
+    return {
+      applicationId: 1,
+      userAgent: 'Mozilla/5.0',
+      ipAddress: '',
     };
   }
 }

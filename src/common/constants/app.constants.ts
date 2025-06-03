@@ -123,5 +123,6 @@ export const APP_CONSTANTS = {
     jwtExpiration: 'JWT_EXPIRATION',
 
     nodeEnvTest: 'test',
+    nodeEnvDevelopment: 'development',
   },
 };

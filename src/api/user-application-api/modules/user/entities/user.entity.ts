@@ -5,6 +5,8 @@ import { USER_CONSTANTS } from '../constants/user.constants';
 
 @Entity('users')
 export class User extends DeleteBaseEntity {
+  public static readonly tableName: string = 'users';
+
   @PrimaryGeneratedColumn()
   public id!: number;
 

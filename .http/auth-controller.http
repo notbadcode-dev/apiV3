@@ -20,7 +20,7 @@ X-Application-Id: {{applicationId}}
 
 {
     "email": "user99@example.com",
-    "passwordHash": "patata8889__",
+    "passwordHash": "patata8889",
     "applicationId": 1
 }
 

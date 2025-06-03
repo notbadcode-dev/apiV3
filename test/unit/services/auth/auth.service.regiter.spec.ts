@@ -1,3 +1,4 @@
+import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
 import { AUTH_CONSTANTS } from '@auth-api/modules/auth/constants/auth.constants';
 import { UserRegisterRequestDto, UserRegisterResponseDto } from '@auth-api/modules/auth/dtos/userRegister.dto';
 import { AuthService } from '@auth-api/modules/auth/services/auth.service';
@@ -8,6 +9,7 @@ import { GlobalResponseService } from '@common/utils/global-response.service';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
+import { LoginHistoryService } from '@user-application-api/modules/login-history/services/login-history.service';
 import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
 import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
@@ -26,6 +28,7 @@ let tokenServiceMock: Partial<jest.Mocked<TokenService>>;
 let userApplicationServiceMock: Partial<jest.Mocked<UserApplicationService>>;
 let transactionServiceMock: Partial<jest.Mocked<TransactionService>>;
 let applicationServiceMock: Partial<jest.Mocked<ApplicationService>>;
+let auditLogServiceMock: jest.Mocked<AuditLogService>;
 
 beforeEach(async () => {
   userServiceMock = {
@@ -45,6 +48,13 @@ beforeEach(async () => {
   applicationServiceMock = {
     validateIsApplicationNotFoundById: jest.fn(),
   };
+
+  auditLogServiceMock = {
+    addCreateLog: jest.fn(),
+    addUpdateLog: jest.fn(),
+    addDeleteLog: jest.fn(),
+    addActionLog: jest.fn(),
+  } as unknown as jest.Mocked<AuditLogService>;
 
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock) = jest.fn();
 
@@ -90,6 +100,14 @@ beforeEach(async () => {
       {
         provide: TransactionService,
         useValue: transactionServiceMock,
+      },
+      {
+        provide: LoginHistoryService,
+        useValue: {} as jest.Mocked<LoginHistoryService>,
+      },
+      {
+        provide: AuditLogService,
+        useValue: auditLogServiceMock,
       },
     ],
   }).compile();
