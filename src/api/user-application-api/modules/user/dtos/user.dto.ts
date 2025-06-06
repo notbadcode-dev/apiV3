@@ -1,5 +1,6 @@
 import { Expose } from 'class-transformer';
 import { IsEmail, IsInt, IsString, Length } from 'class-validator';
+
 import { USER_CONSTANTS } from '../constants/user.constants';
 
 export class UserDto {

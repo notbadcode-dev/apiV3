@@ -122,7 +122,7 @@ CREATE TABLE
         ActionDetail VARCHAR(250), -- Detalles sobre el cambio realizado (cambiado de JSON a VARCHAR(250))
         CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         UserCode VARCHAR(100) NULL, -- Código del usuario que realizó la acción
-        INDEX (EntityName),
+        INDEX (EntityTableName),
         INDEX (EntityId),
         INDEX (CreatedAt)
     ) ENGINE = InnoDB;

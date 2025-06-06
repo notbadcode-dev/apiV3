@@ -1,0 +1,14 @@
+@baseUrl = https://localhost:3443/api/v1/tag
+@applicationId = 1
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXI5OUBleGFtcGxlLmNvbSIsInVzZXJJZCI6NiwidHJ5R2V0SWZFeGlzdHMiOnRydWUsImlhdCI6MTc0OTE5MjAxNSwiZXhwIjoxNzQ5MTk1NjE1fQ.mMadiv4tgMIKFjEbRCBKjFxoHAzqUBxrDWxE1eqkKn4
+
+### Solicitud para crear tag
+POST {{baseUrl}}/create HTTP/1.1
+Content-Type: application/json
+X-Application-Id: {{applicationId}}
+
+{
+    "name": "Tecnologia",
+    "colorRgb": 255000000,
+    "userId": 6
+}

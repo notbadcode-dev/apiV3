@@ -5,7 +5,7 @@ import Redis from 'ioredis';
 
 import { IRedisService } from './redis.service.interface';
 import { REDIS_CONSTANTS } from '../constants/redis.constants';
-import { SetRedisValueDto } from '../dto/setRedisValueDto';
+import { SetRedisValueDto } from '../dto/set-redis-value.dto';
 
 @Injectable()
 export class RedisService implements IRedisService {

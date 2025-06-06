@@ -10,6 +10,7 @@
       "@auth-api/*":                 ["./src/api/auth-api/*"],              // Alias para auth-api
       "@user-application-api/*":     ["./src/api/user-application-api/*"],  // Alias para user-application-api
       "@audit-api/*":                ["./src/api/audit-api/*"],             // Alias para audit-api
+      "@link-api/*":                ["./src/api/link-api/*"],               // Alias para link-api
       "@common/*":                   ["./src/common/*"],                    // Alias para comunes
       "@cert/*":                     ["./cert/*"],                          // Alias para certificados
       "@test/*":                     ["test/*"],                            // Alias para pruebas

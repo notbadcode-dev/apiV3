@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
 import { TokenService } from './services/token.service';
-import { JwtStrategy } from './strategies/jwt.strategy.ts';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 const JWT_MODULE_REGISTER: DynamicModule = JwtModule.registerAsync({
   imports: [ConfigModule],
