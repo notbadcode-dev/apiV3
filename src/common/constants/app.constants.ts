@@ -104,7 +104,7 @@ export const APP_CONSTANTS = {
       useragent: 'user-agent',
       forwardedFor: 'x-forwarded-for',
       applicationId: 'x-application-id',
-
+      translateLanguage: 'lang',
       defaultHeaderValue: 'unknown',
     },
   },
@@ -124,5 +124,7 @@ export const APP_CONSTANTS = {
 
     nodeEnvTest: 'test',
     nodeEnvDevelopment: 'development',
+
+    fallbackLanguage: 'FALLBACK_LANGUAGE',
   },
 };

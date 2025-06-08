@@ -9,12 +9,17 @@
     "tsConfigPath": "tsconfig.build.json",
     "assets": [
       {
-        "include": "environment/**/*",
+        "include": "../environment/**/*",
         "outDir": "dist/environment"
       },
       {
-        "include": "cert/**/*",
+        "include": "../cert/**/*",
         "outDir": "dist/cert"
+      },
+      {
+        "include": "common/modules/translate/i18n/**/*",
+        "outDir": "dist/i18n",
+        "watchAssets": true
       }
     ],
     "watchAssets": true

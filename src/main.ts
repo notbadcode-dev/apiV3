@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as fs from 'fs';
+import { I18nService, I18nValidationPipe } from 'nestjs-i18n';
 import * as path from 'path';
 
 import { AppModule } from './app.module';
@@ -38,7 +39,16 @@ async function createHttpsApp(): Promise<NestExpressApplication> {
 
 function applyGlobalConfiguration(app: NestExpressApplication): void {
   app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalFilters(new GlobalExceptionFilter());
+
+  app.useGlobalPipes(
+    new I18nValidationPipe({
+      transform: true,
+      whitelist: true,
+    }),
+  );
+
+  const I18N = app.get<I18nService<Record<string, unknown>>>(I18nService);
+  app.useGlobalFilters(new GlobalExceptionFilter(I18N));
 }
 
 async function startApp(app: NestExpressApplication, port: number | string): Promise<void> {
