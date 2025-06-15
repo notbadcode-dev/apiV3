@@ -4,6 +4,7 @@ import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
+import { TranslateService } from '@common/modules/translate/services/translate.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
@@ -40,6 +41,7 @@ export class AuthService implements IAuthService {
     private readonly _transactionService: TransactionService,
     private readonly _logHistoryService: LoginHistoryService,
     private readonly _auditService: AuditLogService,
+    private readonly _translateService: TranslateService,
   ) {}
 
   //#endregion
@@ -60,9 +62,12 @@ export class AuthService implements IAuthService {
       return NEW_USER_ENTITY.id;
     });
 
-    const RESPONSE: UserRegisterResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(NEW_USER_ENTITY_ID, AUTH_CONSTANTS.messages.registrationSuccessfully());
+    const MESSAGE = await this._translateService.translateWithoutArguments({
+      key: AUTH_CONSTANTS.messages.registrationSuccessfully,
+    });
+    const RESPONSE: UserRegisterResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(NEW_USER_ENTITY_ID, MESSAGE);
 
-    await this.addAuditLog(NEW_USER_ENTITY_ID, request.email, AUTH_CONSTANTS.messages.registrationSuccessfully());
+    await this.addAuditLog(NEW_USER_ENTITY_ID, request.email, MESSAGE);
 
     return RESPONSE;
   }
@@ -82,16 +87,20 @@ export class AuthService implements IAuthService {
     const IS_PASSWORD_VALID = await bcrypt.compare(request.passwordHash, USER?.passwordHash ?? '');
     if (!IS_PASSWORD_VALID) {
       await this.manageFailureLogin(USER, request, metadata);
-      throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials());
+      throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials);
     }
 
     const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0, tryGetIfExists: true };
     const ACCESS_TOKEN = await this._tokenService.getAccessToken(ACCESS_TOKEN_PAYLOAD);
 
     await this.manageSuccessfullyLogin(USER, request, metadata);
-    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.loginSuccessfully());
 
-    return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, AUTH_CONSTANTS.messages.loginSuccessfully());
+    const MESSAGE = await this._translateService.translateWithoutArguments({
+      key: AUTH_CONSTANTS.messages.loginSuccessfully,
+    });
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', MESSAGE);
+
+    return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, MESSAGE);
   }
 
   @LogMethod
@@ -104,12 +113,12 @@ export class AuthService implements IAuthService {
     const IS_SUCCESSFULLY_REVOKED = await this._tokenService.revokeToken(USER?.id ?? 0);
 
     if (!IS_SUCCESSFULLY_REVOKED) {
-      throw new UnauthorizedException(AUTH_CONSTANTS.messages.logoutAlreadyDone());
+      throw new UnauthorizedException(AUTH_CONSTANTS.messages.logoutAlreadyDone);
     }
 
-    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.logoutSuccessfully());
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.logoutSuccessfully);
 
-    return GlobalResponseService.getSuccessfullyGlobalResponse(IS_SUCCESSFULLY_REVOKED, AUTH_CONSTANTS.messages.logoutSuccessfully());
+    return GlobalResponseService.getSuccessfullyGlobalResponse(IS_SUCCESSFULLY_REVOKED, AUTH_CONSTANTS.messages.logoutSuccessfully);
   }
 
   @LogMethod
@@ -120,7 +129,7 @@ export class AuthService implements IAuthService {
     const USER: UserDto | null = await this._userService.getById(REQUEST);
 
     if (!USER || USER.id !== request.userId) {
-      throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials());
+      throw new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials);
     }
 
     const ACCESS_TOKEN_PAYLOAD: AccessTokenPayloadDto = { email: USER?.email ?? '', userId: USER?.id ?? 0, tryGetIfExists: false };
@@ -128,9 +137,9 @@ export class AuthService implements IAuthService {
 
     await this._tokenService.refreshToken(request.userId);
 
-    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.tokenRefreshed());
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.tokenRefreshed);
 
-    return GlobalResponseService.getSuccessfullyGlobalResponse(NEW_TOKEN, AUTH_CONSTANTS.messages.tokenRefreshed());
+    return GlobalResponseService.getSuccessfullyGlobalResponse(NEW_TOKEN, AUTH_CONSTANTS.messages.tokenRefreshed);
   }
 
   //#endregion
@@ -200,7 +209,7 @@ export class AuthService implements IAuthService {
       applicationId: request.applicationId,
       ipAddress: metadata.ipAddress,
       userAgent: metadata.userAgent,
-      failureReason: AUTH_CONSTANTS.messages.invalidCredentials(),
+      failureReason: AUTH_CONSTANTS.messages.invalidCredentials,
     });
   }
 

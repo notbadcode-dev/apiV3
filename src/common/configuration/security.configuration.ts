@@ -11,10 +11,14 @@ import { NextFunction, Request, Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import { I18nService } from 'nestjs-i18n';
 import * as path from 'path';
 
 export class SecurityConfigurator {
-  constructor(private readonly _app: NestExpressApplication) {}
+  constructor(
+    private readonly _app: NestExpressApplication,
+    private readonly _i18n: I18nService,
+  ) {}
 
   public apply(): void {
     this.configureProxyTrust();

@@ -18,8 +18,10 @@ async function bootstrap(): Promise<void> {
 
 async function createHttpApp(): Promise<NestExpressApplication> {
   const APP = await NestFactory.create<NestExpressApplication>(AppModule);
+  const I18N = APP.get<I18nService<Record<string, unknown>>>(I18nService);
+
   applyGlobalConfiguration(APP);
-  new SecurityConfigurator(APP).apply();
+  new SecurityConfigurator(APP, I18N).apply();
   return APP;
 }
 
@@ -32,8 +34,10 @@ async function createHttpsApp(): Promise<NestExpressApplication> {
   const APP = await NestFactory.create<NestExpressApplication>(AppModule, {
     httpsOptions: HTTP_OPTIONS,
   });
+  const I18N = APP.get<I18nService<Record<string, unknown>>>(I18nService);
+
   applyGlobalConfiguration(APP);
-  new SecurityConfigurator(APP).apply();
+  new SecurityConfigurator(APP, I18N).apply();
   return APP;
 }
 

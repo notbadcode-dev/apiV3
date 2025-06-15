@@ -17,6 +17,7 @@ import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
 import * as bcrypt from 'bcryptjs';
+import { I18nService } from 'nestjs-i18n';
 
 import { AuthServiceTestData } from './data/auth-service-test.data';
 
@@ -37,6 +38,7 @@ let tokenServiceMock: jest.Mocked<TokenService>;
 let transactionServiceMock: jest.Mocked<TransactionService>;
 let loginHistoryServiceMock: jest.Mocked<LoginHistoryService>;
 let auditLogServiceMock: jest.Mocked<AuditLogService>;
+let i18nServiceMock: jest.Mocked<I18nService>;
 
 beforeEach(async () => {
   userServiceMock = {
@@ -71,6 +73,10 @@ beforeEach(async () => {
     addActionLog: jest.fn(),
   } as unknown as jest.Mocked<AuditLogService>;
 
+  i18nServiceMock = {
+    translate: jest.fn(),
+  } as unknown as jest.Mocked<I18nService>;
+
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockClear();
 
   authService = new AuthService(
@@ -81,6 +87,7 @@ beforeEach(async () => {
     transactionServiceMock,
     loginHistoryServiceMock,
     auditLogServiceMock,
+    i18nServiceMock,
   );
 });
 
@@ -108,7 +115,7 @@ it('should throw UnauthorizedException if password is incorrect', async () => {
   applicationServiceMock.validateIsApplicationNotFoundById.mockResolvedValue();
   userApplicationServiceMock.validateAccessUserOnApplication.mockResolvedValue();
 
-  await expect(authService.login(METADATA, LOGIN_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials()));
+  await expect(authService.login(METADATA, LOGIN_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials));
 });
 
 it('should return token response if credentials are valid', async () => {
@@ -118,7 +125,7 @@ it('should return token response if credentials are valid', async () => {
   const ACCESS_TOKEN = 'mocked-token';
   const RESPONSE: UserLoginResponseDto = {
     data: ACCESS_TOKEN,
-    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.loginSuccessfully() }],
+    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.loginSuccessfully }],
   };
 
   userServiceMock.getUserByEmail.mockResolvedValue(USER);

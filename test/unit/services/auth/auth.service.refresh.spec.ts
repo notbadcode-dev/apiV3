@@ -23,6 +23,7 @@ jest.mock('@common/modules/token/services/token.service');
 
 // eslint-disable-next-line import/order
 import { AuditLogService } from '@audit-api/modules/audit/services/audit.service';
+import { I18nService } from 'nestjs-i18n';
 
 let authService: AuthService;
 let userServiceMock: jest.Mocked<UserService>;
@@ -31,6 +32,7 @@ let userApplicationServiceMock: jest.Mocked<UserApplicationService>;
 let tokenServiceMock: jest.Mocked<TokenService>;
 let transactionServiceMock: jest.Mocked<TransactionService>;
 let auditLogServiceMock: jest.Mocked<AuditLogService>;
+let i18nServiceMock: jest.Mocked<I18nService>;
 
 beforeEach(() => {
   userServiceMock = {
@@ -54,6 +56,10 @@ beforeEach(() => {
     addActionLog: jest.fn(),
   } as unknown as jest.Mocked<AuditLogService>;
 
+  i18nServiceMock = {
+    translate: jest.fn(),
+  } as unknown as jest.Mocked<I18nService>;
+
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockClear();
 
   authService = new AuthService(
@@ -64,6 +70,7 @@ beforeEach(() => {
     transactionServiceMock,
     {} as unknown as LoginHistoryService,
     auditLogServiceMock,
+    i18nServiceMock,
   );
 });
 
@@ -72,7 +79,7 @@ it('should throw UnauthorizedException if user does not exist', async () => {
 
   userServiceMock.getById.mockResolvedValue(null);
 
-  await expect(authService.refreshToken(REFRESH_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials()));
+  await expect(authService.refreshToken(REFRESH_REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.invalidCredentials));
 
   expect(userServiceMock.getById).toHaveBeenCalledWith({ id: REFRESH_REQUEST.userId });
 });
@@ -83,7 +90,7 @@ it('should return token response if refresh is valid', async () => {
   const NEW_TOKEN = 'new.token.jwt';
   const EXPECTED_RESPONSE: UserRefreshResponseDto = {
     data: NEW_TOKEN,
-    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.tokenRefreshed() }],
+    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.tokenRefreshed }],
   };
 
   userServiceMock.getById.mockResolvedValue(USER);

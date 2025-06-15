@@ -13,6 +13,7 @@ import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/use
 import { UserDto } from '@user-application-api/modules/user/dtos/user.dto';
 import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
+import { I18nService } from 'nestjs-i18n';
 
 import { AuthServiceTestData } from './data/auth-service-test.data';
 
@@ -22,6 +23,7 @@ let authService: AuthService;
 let userServiceMock: jest.Mocked<UserService>;
 let tokenServiceMock: jest.Mocked<TokenService>;
 let auditLogServiceMock: jest.Mocked<AuditLogService>;
+let i18nServiceMock: jest.Mocked<I18nService>;
 
 beforeEach(() => {
   userServiceMock = {
@@ -39,6 +41,10 @@ beforeEach(() => {
     addActionLog: jest.fn(),
   } as unknown as jest.Mocked<AuditLogService>;
 
+  i18nServiceMock = {
+    translate: jest.fn(),
+  } as unknown as jest.Mocked<I18nService>;
+
   authService = new AuthService(
     tokenServiceMock,
     userServiceMock,
@@ -47,6 +53,7 @@ beforeEach(() => {
     {} as unknown as TransactionService,
     {} as unknown as LoginHistoryService,
     auditLogServiceMock,
+    i18nServiceMock,
   );
 
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock).mockClear();
@@ -65,7 +72,7 @@ it('should throw UnauthorizedException if revokeToken fails', async () => {
   userServiceMock.getById.mockResolvedValue(USER);
   tokenServiceMock.revokeToken.mockResolvedValue(false);
 
-  await expect(authService.logout(REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.logoutAlreadyDone()));
+  await expect(authService.logout(REQUEST)).rejects.toThrow(new UnauthorizedException(AUTH_CONSTANTS.messages.logoutAlreadyDone));
 });
 
 it('should return response if revokeToken succeeds', async () => {
@@ -73,7 +80,7 @@ it('should return response if revokeToken succeeds', async () => {
   const USER: UserDto = AuthServiceTestData.getValidUserDto();
   const EXPECTED_RESPONSE: UserLogoutResponseDto = {
     data: true,
-    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.logoutSuccessfully() }],
+    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.logoutSuccessfully }],
   };
 
   userServiceMock.getById.mockResolvedValue(USER);

@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [CommonModule, AuthApiModule, UserApplicationApiModule, AuthApiModule, LinkApiModule],
+  imports: [CommonModule, AuthApiModule, UserApplicationApiModule, LinkApiModule],
   controllers: [AppController],
   providers: [AppService],
 })

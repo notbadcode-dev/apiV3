@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { join } from 'path';
 
+import { TranslateService } from './services/translate.service';
+
 @Module({
   imports: [
     I18nModule.forRootAsync({
@@ -19,7 +21,7 @@ import { join } from 'path';
     }),
   ],
   controllers: [],
-  providers: [],
-  exports: [],
+  providers: [TranslateService],
+  exports: [TranslateService],
 })
 export class TranslateModule {}

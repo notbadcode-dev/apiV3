@@ -13,6 +13,7 @@ import { LoginHistoryService } from '@user-application-api/modules/login-history
 import { USER_CONSTANTS } from '@user-application-api/modules/user/constants/user.constants';
 import { UserService } from '@user-application-api/modules/user/services/user.service';
 import { UserApplicationService } from '@user-application-api/modules/user-application/services/user-application.service';
+import { I18nService } from 'nestjs-i18n';
 
 import { AuthServiceTestData } from './data/auth-service-test.data';
 
@@ -29,6 +30,7 @@ let userApplicationServiceMock: Partial<jest.Mocked<UserApplicationService>>;
 let transactionServiceMock: Partial<jest.Mocked<TransactionService>>;
 let applicationServiceMock: Partial<jest.Mocked<ApplicationService>>;
 let auditLogServiceMock: jest.Mocked<AuditLogService>;
+let i18nServiceMock: jest.Mocked<I18nService>;
 
 beforeEach(async () => {
   userServiceMock = {
@@ -55,6 +57,10 @@ beforeEach(async () => {
     addDeleteLog: jest.fn(),
     addActionLog: jest.fn(),
   } as unknown as jest.Mocked<AuditLogService>;
+
+  i18nServiceMock = {
+    translate: jest.fn(),
+  } as unknown as jest.Mocked<I18nService>;
 
   (GlobalResponseService.getSuccessfullyGlobalResponse as jest.Mock) = jest.fn();
 
@@ -109,6 +115,10 @@ beforeEach(async () => {
         provide: AuditLogService,
         useValue: auditLogServiceMock,
       },
+      {
+        provide: I18nService,
+        useValue: i18nServiceMock,
+      },
     ],
   }).compile();
 
@@ -157,7 +167,7 @@ it('should register a user successfully', async () => {
   const REGISTER_REQUEST: UserRegisterRequestDto = AuthServiceTestData.getValidUserRegisterRequest();
   const EXPECTED_RESPONSE: UserRegisterResponseDto = {
     data: AuthServiceTestData.getValidUserId(),
-    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.registrationSuccessfully() }],
+    messageList: [{ type: EMessageType.SUCCESSFULLY, message: AUTH_CONSTANTS.messages.registrationSuccessfully }],
   };
 
   userServiceMock?.validateIsAlreadyUserByEmail?.mockResolvedValue(undefined);

@@ -5,12 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
-            "type": "node",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "runtimeExecutable": "npm",
-            "runtimeArgs": ["run-script", "start:dev"]
+        "type": "node",
+        "request": "launch",
+        "name": "NestJS Debug",
+        "runtimeArgs": ["-r", "ts-node/register", "-r", "tsconfig-paths/register"],
+        "args": ["${workspaceFolder}/src/main.ts"],
+        "sourceMaps": true,
+        "cwd": "${workspaceFolder}",
+        "protocol": "inspector",
+        "outFiles": ["${workspaceFolder}/dist/**/*.js"]
         },
         {
             "name": "Debug NestJS Directo",
