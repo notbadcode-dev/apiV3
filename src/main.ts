@@ -1,5 +1,7 @@
 import { SecurityConfigurator } from '@common/configuration/security.configuration';
 import { GlobalExceptionFilter } from '@common/filters/global-exception.filter';
+import { TranslationInterceptor } from '@common/interceptor/translate.interceptor';
+import { TranslateService } from '@common/modules/translate/services/translate.service';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -18,10 +20,15 @@ async function bootstrap(): Promise<void> {
 
 async function createHttpApp(): Promise<NestExpressApplication> {
   const APP = await NestFactory.create<NestExpressApplication>(AppModule);
+
   const I18N = APP.get<I18nService<Record<string, unknown>>>(I18nService);
+  const TRANSLATE = APP.get<TranslateService>(TranslateService);
+
+  APP.useGlobalInterceptors(new TranslationInterceptor(TRANSLATE));
 
   applyGlobalConfiguration(APP);
   new SecurityConfigurator(APP, I18N).apply();
+
   return APP;
 }
 
@@ -35,6 +42,9 @@ async function createHttpsApp(): Promise<NestExpressApplication> {
     httpsOptions: HTTP_OPTIONS,
   });
   const I18N = APP.get<I18nService<Record<string, unknown>>>(I18nService);
+  const TRANSLATE = APP.get<TranslateService>(TranslateService);
+
+  APP.useGlobalInterceptors(new TranslationInterceptor(TRANSLATE));
 
   applyGlobalConfiguration(APP);
   new SecurityConfigurator(APP, I18N).apply();

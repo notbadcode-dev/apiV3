@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { I18nService } from 'nestjs-i18n';
-
-import { TranslateOptionsWithoutArgumentsDto } from '../dtos/translate.dto';
+import { I18nContext, I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class TranslateService {
@@ -13,8 +11,8 @@ export class TranslateService {
 
   //#region Public Methods
 
-  public async translateWithoutArguments(options: TranslateOptionsWithoutArgumentsDto): Promise<string> {
-    return this._i18n.translate(options.key, { lang: 'en' });
+  public async translateWithoutArguments(key: string): Promise<string> {
+    return this._i18n.translate(key, { lang: I18nContext.current()?.lang });
   }
 
   //#endregion

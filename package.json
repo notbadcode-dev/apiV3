@@ -19,7 +19,7 @@
   "test:cov": "cross-env NODE_ENV=test jest --detectOpenHandles --coverage --config ./test/jest.config.json",
   "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --config ./test/jest.config.json",
   "test:e2e": "cross-env NODE_ENV=test jest --detectOpenHandles --config ./test/jest-e2e.json",
-  "tree": "tree -I 'node_modules"
+  "tree": "tree -I 'node_modules'"
 },
   "dependencies": {
     "@nestjs/common": "^10.4.15",

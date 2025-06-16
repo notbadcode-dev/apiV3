@@ -2,6 +2,7 @@ import { AddAuditLogDto } from '@audit-api/modules/audit/dtos/add-audit-log.dto'
 import { AuditLog } from '@audit-api/modules/audit/entities/audit-log.entity';
 import { EAuditActionType } from '@audit-api/modules/audit/enums/audit-action-type.enum';
 import { IAuditLogService } from '@audit-api/modules/audit/services/audit.service.interface';
+import { TranslateService } from '@common/modules/translate/services/translate.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,7 +11,10 @@ import { Repository } from 'typeorm';
 export class AuditLogService implements IAuditLogService {
   //#region constructor and attributes
 
-  constructor(@InjectRepository(AuditLog) private _auditLogRepository: Repository<AuditLog>) {}
+  constructor(
+    @InjectRepository(AuditLog) private _auditLogRepository: Repository<AuditLog>,
+    private readonly _translateService: TranslateService,
+  ) {}
 
   //#endregion
 
@@ -41,11 +45,13 @@ export class AuditLogService implements IAuditLogService {
       return;
     }
 
+    const ACTION_DETAIL: string = await this._translateService.translateWithoutArguments(addAuditLog.actionDetail);
+
     const AUDIT_LOG_ENTITY = this._auditLogRepository.create({
       entityId: addAuditLog.entityId,
       entityReference: addAuditLog.entityReference,
       entityTableName: addAuditLog.entityTableName,
-      actionDetail: addAuditLog.actionDetail,
+      actionDetail: ACTION_DETAIL,
       actionType: actionType ?? EAuditActionType.OTHERS,
     });
 

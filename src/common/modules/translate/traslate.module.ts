@@ -12,7 +12,7 @@ import { TranslateService } from './services/translate.service';
       useFactory: (configService: ConfigService) => ({
         fallbackLanguage: configService.getOrThrow(APP_CONSTANTS.environment.fallbackLanguage),
         loaderOptions: {
-          path: join(__dirname, '..', '..', '..', 'i18n'),
+          path: join(process.cwd(), 'src', 'common', 'modules', 'translate', 'i18n'),
           watch: true,
         },
       }),

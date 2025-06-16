@@ -4,7 +4,6 @@ import { RequestMetadataDto } from '@common/dtos/request-metadata.dto';
 import { TransactionService } from '@common/modules/database/services/transaction.service';
 import { AccessTokenPayloadDto } from '@common/modules/token/dtos/access-token-payload.dto';
 import { TokenService } from '@common/modules/token/services/token.service';
-import { TranslateService } from '@common/modules/translate/services/translate.service';
 import { GlobalResponseService } from '@common/utils/global-response.service';
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ApplicationService } from '@user-application-api/modules/application/services/application.service';
@@ -41,7 +40,6 @@ export class AuthService implements IAuthService {
     private readonly _transactionService: TransactionService,
     private readonly _logHistoryService: LoginHistoryService,
     private readonly _auditService: AuditLogService,
-    private readonly _translateService: TranslateService,
   ) {}
 
   //#endregion
@@ -62,12 +60,9 @@ export class AuthService implements IAuthService {
       return NEW_USER_ENTITY.id;
     });
 
-    const MESSAGE = await this._translateService.translateWithoutArguments({
-      key: AUTH_CONSTANTS.messages.registrationSuccessfully,
-    });
-    const RESPONSE: UserRegisterResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(NEW_USER_ENTITY_ID, MESSAGE);
+    const RESPONSE: UserRegisterResponseDto = GlobalResponseService.getSuccessfullyGlobalResponse(NEW_USER_ENTITY_ID, AUTH_CONSTANTS.messages.registrationSuccessfully);
 
-    await this.addAuditLog(NEW_USER_ENTITY_ID, request.email, MESSAGE);
+    await this.addAuditLog(NEW_USER_ENTITY_ID, request.email, AUTH_CONSTANTS.messages.registrationSuccessfully);
 
     return RESPONSE;
   }
@@ -95,12 +90,9 @@ export class AuthService implements IAuthService {
 
     await this.manageSuccessfullyLogin(USER, request, metadata);
 
-    const MESSAGE = await this._translateService.translateWithoutArguments({
-      key: AUTH_CONSTANTS.messages.loginSuccessfully,
-    });
-    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', MESSAGE);
+    await this.addAuditLog(USER?.id ?? 0, USER?.email ?? '', AUTH_CONSTANTS.messages.loginSuccessfully);
 
-    return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, MESSAGE);
+    return GlobalResponseService.getSuccessfullyGlobalResponse(ACCESS_TOKEN, AUTH_CONSTANTS.messages.loginSuccessfully);
   }
 
   @LogMethod

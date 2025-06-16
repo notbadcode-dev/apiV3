@@ -1,0 +1,22 @@
+{
+  "YOUR_ARE_USING_INSECURE_CONNECTION": "You are using an insecure connection (HTTP). Please use HTTPS for better security.",
+  "MAINTENANCE_MODE_ENABLED": "The API is currently under maintenance. Please try again later.",
+  "HEALTH_CHECK_SUCCESS": "The API is healthy and responding correctly.",
+  "GET_HELLO": "Hello, I am an Authorization API for NotBadCode projects.",
+  "ROUTE_NOTFOUND_ON_HTTP_METHOD": "{{method}}: {{route}} - Not Found",
+  "INVALID_ITEM_ID_DEFAULT": "The provided {{itemDescription}} ID cannot be zero or invalid. Please provide a valid ID.",
+  "INVALID_ITEM_ID_NEGATIVE": "The provided {{itemDescription}} ID {{itemId}} is invalid. Please check the input and try again.",
+  "INVALID_ITEM_ID_SUCCESS": "The provided {{itemDescription}} ID {{itemId}} is valid.",
+  "NOT_FOUND_USER_WITH_ITEM_ID": "No {{itemDescription}} found with ID {{itemId}}. Please verify the {{itemDescription}} ID and try again.",
+  "GET_ITEM_WITH_ITEM_ID_IS_SUCCESSFULLY": "{{itemDescription}} with ID {{itemId}} has been successfully retrieved.",
+  "ITEM_IS_REQUIRED": "{{itemDescription}} is required.",
+  "ITEM_ALREADY_EXISTS": "{{itemDescription}} already exists. Please choose a different one.",
+  "DATABASE_CONNECTION_IS_NOT_ESTABLISHED": "Database connection is not established.",
+  "DATABASE_QUERY_FAILED": "Database query failed. Please try again later.",
+  "APP_RUNNING_ON": "🚀 Application is running:\n   Protocol : HTTPS\n   Port     : {{port}}",
+  "DATABASE_RUNNING_ON_SUCCESS": "🛢️  Database connection details:\n   Host : {{host}}\n   Port : {{port}}\n   Name : {{name}}",
+  "DATABASE_RUNNING_ON_INCOMPLETE": "⚠️  Database configuration is incomplete.\n   Please check the following environment variables:\n   - DB_HOST\n   - DB_PORT\n   - DB_NAME",
+  "JWT_SECRET_IS_NOT_DEFINED": "JWT_SECRET is not defined in environment variables.",
+  "JWT_FROM_REQUEST_FUNCTION_COULD_NOT_GET": "JWT_FROM_REQUEST_FUNCTION could not get.",
+  "ACCESS_NOT_AUTHORIZED": "Access not authorized."
+}
